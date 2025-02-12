@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:zootopia/Signup.dart';
 
@@ -22,6 +24,29 @@ class _ForgotpasswordState extends State<Forgotpassword> {
     if (_fommKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Password reset link send to your email.")));
+    }
+  }
+
+  Future<void> passwordReset() async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: _emailController.text.trim());
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text('Password reset link send to your email'),
+            );
+          });
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text(e.message.toString()),
+            );
+          });
     }
   }
 
@@ -73,11 +98,10 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                                 MaterialStateProperty.all(Colors.black),
                             foregroundColor:
                                 MaterialStateProperty.all(Colors.white)),
-                        onPressed: _submitForm,
+                        onPressed: passwordReset,
                         child: const Text("Send password reset link"))
                   ],
-                ))
-        ),
+                ))),
       ),
     );
   }

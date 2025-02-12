@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:zootopia/Model/user_model.dart';
+import 'package:zootopia/bottomnavbar.dart';
 import 'package:zootopia/function/AppbarZootioia.dart';
 
 class UserForm extends StatefulWidget {
@@ -15,7 +17,8 @@ class _UserFormState extends State<UserForm> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _repasswordController = TextEditingController();
-  final UserController _userController = Get.put(UserController());
+  final AuthController _authController = AuthController();
+
 
   @override
   void dispose() {
@@ -26,15 +29,24 @@ class _UserFormState extends State<UserForm> {
     super.dispose();
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Form submitted successfully!')),
+      String? result = await _authController.registerUser(
+        _nameController.text.trim(),
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
       );
-      print('Name: ${_nameController.text}');
-      print('Email: ${_emailController.text}');
-      print('Phone: ${_phoneController.text}');
-      print('Password: ${_passwordController.text}');
+
+      if (result == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Registration Successful!')),
+        );
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Bottomnavbar()));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result), backgroundColor: Colors.red),
+        );
+      }
     }
   }
 
@@ -158,24 +170,15 @@ class _UserFormState extends State<UserForm> {
                 },
               ),
               const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.only(top: 15),
-                child: TextButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await _userController.registerUser(
-                        _nameController.text,
-                        _emailController.text,
-                        _phoneController.text,
-                        _passwordController.text,
-                      );
-                      if (_userController.currentUser.value != null) {
-                        Get.off(() => EmailValidationScreen(user: _userController.currentUser.value!));
-                      }
-                    }
-                  },
-                  child: Text("SignUp"),
-                )
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black),
+                    foregroundColor: MaterialStateProperty.all(Colors.white)
+                ),
+                onPressed: _submitForm,
+
+
+                child: const Text('Register',style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 17),),
               ),
             ],
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zootopia/HomePage.dart';
+import 'package:zootopia/Model/user_model.dart';
 import 'package:zootopia/Signup.dart';
+import 'package:zootopia/aaa.dart';
 import 'package:zootopia/bottomnavbar.dart';
 import 'package:zootopia/function/ForgotPassword.dart';
 
@@ -16,6 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordVisible = false;
+  final AuthController _authController=AuthController();
+
 
   @override
   void dispose() {
@@ -24,14 +28,29 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Successful logged in")));
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Bottomnavbar()));
+      String email =_emailController.text.trim();
+      String password=_passwordController.text.trim();
+      String? result = await _authController.loginUser(email, password);
+
+      if(result==null)
+      {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login successful!')),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Bottomnavbar()),
+        );
+      } else
+      {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result)),
+        );
+      }
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                                   foregroundColor: MaterialStateProperty.all(Colors.white)
                               ),
                               onPressed: () {
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Bottomnavbar()));                              }, child: Text('Test'))
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));                              }, child: Text('Test'))
                       )
                     ],
                   )

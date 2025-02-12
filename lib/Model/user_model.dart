@@ -1,31 +1,72 @@
-class UserModel {
-  final String name;
-  final String email;
-  final String phone;
-  final String password;
+import 'package:zootopia/Controller/user_controller.dart';
+import 'package:zootopia/Model//user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  UserModel({
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.password,
-  });
+class AuthController {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'password': password, // In real cases, store hashed passwords
-    };
+  // Register User
+  Future<String?> registerUser(String name, String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      UserModel user = UserModel(
+        uid: userCredential.user!.uid,
+        name: name,
+        email: email,
+        password: password,
+        // phone: '',
+      );
+
+      await _firestore.collection("users").doc(user.uid).set(user.toMap());
+
+      return null; // Success
+    } on FirebaseAuthException catch (e) {
+      return e.message; // Return error message
+    }
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> json) {
-    return UserModel(
-      name: json['name'],
-      email: json['email'],
-      phone: json['phone'],
-      password: json['password'],
-    );
+
+
+  // Login User
+  Future<String?> loginUser(String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Check if user exists in Firestore
+
+      DocumentSnapshot userDoc = await _firestore.collection("users").doc(userCredential.user!.uid).get();
+
+      if (!userDoc.exists) {
+        return "User not found in database"; // Prevents unauthorized logins
+      }
+
+      return null; // Success
+    } on FirebaseAuthException catch (e) {
+      return e.message; // Return error message
+    }
+  }
+
+  Future<void> sendPasswordResetLink(String email) async {
+    try{
+      await _auth.sendPasswordResetEmail(email: email);
+    }
+    catch (e)
+    {
+      print(e.toString());
+    }
+  }
+
+  // Logout User
+  Future<void> logoutUser() async {
+    await _auth.signOut();
   }
 }
