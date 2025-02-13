@@ -1,13 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:zootopia/Login_Page.dart';
+import 'package:zootopia/Starting/Session.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String _userName="Unknown User";
+  String _userEmail="No Email Found";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserSession();
+  }
+
+
+  Future<void> _loadUserSession() async {
+    Map<String, dynamic>? userDetails = await Session.getUserDetails();
+
+    setState(() {
+      _userName = userDetails?['name']  ;
+      _userEmail = userDetails?['email']  ;
+    });
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.black,
@@ -31,10 +55,10 @@ class ProfilePage extends StatelessWidget {
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     children: [
-                      Text("AKHIL ANTO",
+                      Text(_userName!,
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
-                      Text("akhilcanto@gmail.com",
+                      Text(_userEmail!,
                           style: TextStyle(
                             fontSize: 20,
                           )),

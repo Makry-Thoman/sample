@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zootopia/Login_Page.dart';
 import 'package:zootopia/Pets%20Start%20-1.dart';
+import 'package:zootopia/Starting/Session.dart';
+import 'package:zootopia/Starting/userSelection.dart';
 import 'package:zootopia/bottomnavbar.dart';
 class Splass extends StatefulWidget {
   const Splass({super.key});
@@ -13,13 +15,39 @@ class Splass extends StatefulWidget {
 class _SplassState extends State<Splass> {
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacement(
+    // Add a post-frame callback to delay the navigation to the next screen
+    /* WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => LoginPage(),
-          ));
-    });
+          MaterialPageRoute(builder: (context) => LoginForm()),
+        );
+      });
+    });*/
+    _checkSession();
+  }
+
+
+  // Check session and navigate accordingly
+  Future<void> _checkSession() async {
+    final sessionData = await Session.getSession();
+    final bool isLoggedIn = sessionData['uid'] != null;
+
+    // Delay for splash animation
+    await Future.delayed(const Duration(seconds: 3));
+
+    // Navigate to Home if logged in, else Login
+    if (isLoggedIn) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const BottomAppBar()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Userselection()),
+      );
+    }
   }
 
   @override

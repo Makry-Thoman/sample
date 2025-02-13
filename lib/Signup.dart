@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zootopia/Model/user_model.dart';
+import 'package:zootopia/Controller/User_Controller.dart';
 import 'package:zootopia/bottomnavbar.dart';
 import 'package:zootopia/function/AppbarZootioia.dart';
 
@@ -17,7 +17,7 @@ class _UserFormState extends State<UserForm> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _repasswordController = TextEditingController();
-  final AuthController _authController = AuthController();
+  final UserController _userController = UserController();
 
 
   @override
@@ -31,7 +31,7 @@ class _UserFormState extends State<UserForm> {
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      String? result = await _authController.registerUser(
+      String? result = await _userController.registerUser(
         _nameController.text.trim(),
         _emailController.text.trim(),
         _passwordController.text.trim(),

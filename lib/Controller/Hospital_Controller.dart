@@ -1,29 +1,29 @@
-import 'package:zootopia/Controller/user_controller.dart';
-import 'package:zootopia/Model//user_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:zootopia/Models/Hospital_Model.dart';
 
-class AuthController {
+
+class hospitalController{
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore =FirebaseFirestore.instance;
 
-  // Register User
-  Future<String?> registerUser(String name, String email, String password) async {
+  // register hospital
+  Future<String?> registerHospital(String name, String email, String password, String? imageUrl) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      UserModel user = UserModel(
+      HospitalModel hospital = HospitalModel(
         uid: userCredential.user!.uid,
         name: name,
         email: email,
-        password: password,
-        // phone: '',
+        imageUrl: imageUrl ?? "",
       );
 
-      await _firestore.collection("users").doc(user.uid).set(user.toMap());
+      await _firestore.collection("Hospital").doc(hospital.uid).set(hospital.toMap());
 
       return null; // Success
     } on FirebaseAuthException catch (e) {
@@ -31,10 +31,8 @@ class AuthController {
     }
   }
 
-
-
-  // Login User
-  Future<String?> loginUser(String email, String password) async {
+  // Login hospital
+  Future<String?> loginHospital(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -43,10 +41,10 @@ class AuthController {
 
       // Check if user exists in Firestore
 
-      DocumentSnapshot userDoc = await _firestore.collection("users").doc(userCredential.user!.uid).get();
+      DocumentSnapshot userDoc = await _firestore.collection("Hospital").doc(userCredential.user!.uid).get();
 
       if (!userDoc.exists) {
-        return "User not found in database"; // Prevents unauthorized logins
+        return "Hospital not found in database"; // Prevents unauthorized logins
       }
 
       return null; // Success
@@ -65,8 +63,4 @@ class AuthController {
     }
   }
 
-  // Logout User
-  Future<void> logoutUser() async {
-    await _auth.signOut();
-  }
 }

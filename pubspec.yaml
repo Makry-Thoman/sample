@@ -44,6 +44,7 @@ dependencies:
   lottie: ^3.3.1
   shared_preferences: ^2.4.0
   firebase_auth: ^5.4.1
+  image_picker: ^1.0.7
   firebase_storage: ^12.4.1
   firebase_database: ^11.3.1
   cloud_firestore: ^5.6.3
@@ -86,6 +87,7 @@ flutter:
       - asset/ZootopiaAppWhite.png
       - asset/me.jpeg
       - asset/or.png
+      - asset/image.png
       - asset/CreatePet.png
   #   - images/a_dot_ham.jpeg
 

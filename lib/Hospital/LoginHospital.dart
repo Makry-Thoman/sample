@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:zootopia/Controller/Hospital_Controller.dart';
 import 'package:zootopia/Controller/User_Controller.dart';
-import 'package:zootopia/HomePage.dart';
+import 'package:zootopia/Hospital/RegisterHospital.dart';
 import 'package:zootopia/Signup.dart';
 import 'package:zootopia/Starting/userSelection.dart';
 import 'package:zootopia/bottomnavbar.dart';
 import 'package:zootopia/function/ForgotPassword.dart';
-
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginHospital extends StatefulWidget {
+  const LoginHospital({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginHospital> createState() => _LoginHospitalState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginHospitalState extends State<LoginHospital> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordVisible = false;
-  final UserController _authController=UserController();
+  final hospitalController _authController=hospitalController();
 
 
   @override
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState!.validate()) {
       String email =_emailController.text.trim();
       String password=_passwordController.text.trim();
-      String? result = await _authController.loginUser(email, password);
+      String? result = await _authController.loginHospital(email, password);
 
       if(result==null)
       {
@@ -56,6 +56,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
 
       body: Center(
+
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Form(
@@ -65,13 +66,13 @@ class _LoginPageState extends State<LoginPage> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Image.asset("asset/White_and_Black_bg_removed.png.png",
+                      Image.asset("asset/image.png",
                           height: 300),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                          labelText: 'Email',
+                          labelText: 'Hospital email id',
                           prefixIcon: Icon(Icons.email),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25),
@@ -113,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                       ),
+                      /*
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -127,14 +129,18 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text("Forgot Password?")),
                         ],
                       ),
+
+                       */
+                      const SizedBox(height: 16),
+
                       SizedBox(
                           width: 150,
                           height: 40,
                           child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(Colors.black),
-                              foregroundColor: MaterialStateProperty.all(Colors.white)
-                            ),
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(Colors.black),
+                                  foregroundColor: MaterialStateProperty.all(Colors.white)
+                              ),
                               onPressed: _submitForm, child: Text('Login'))
                       ),
                       const SizedBox(height: 16),
@@ -147,8 +153,8 @@ class _LoginPageState extends State<LoginPage> {
                                   foregroundColor: MaterialStateProperty.all(Colors.white)
                               ),
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => UserForm()));
-                              }, child: Text('Sign Up'))
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Registerhospital()));
+                              }, child: Text('Register'))
                       ),
                       const SizedBox(height: 16),
                       SizedBox(
@@ -160,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                                   foregroundColor: MaterialStateProperty.all(Colors.white)
                               ),
                               onPressed: () {
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Userselection()));                              }, child: Text('Test'))
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Bottomnavbar()));                              }, child: Text('Test'))
                       )
                     ],
                   )
