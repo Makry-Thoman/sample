@@ -1,12 +1,12 @@
 class HospitalModel {
   String uid;
-  String name;
+  String hospitalname;
   String email;
   String imageUrl;
 
   HospitalModel({
     required this.uid,
-    required this.name,
+    required this.hospitalname,
     required this.email,
     required this.imageUrl,
   });
@@ -14,7 +14,7 @@ class HospitalModel {
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
-      'name': name,
+      'Hospitalname': hospitalname,
       'email': email,
       'imageUrl': imageUrl,
     };
@@ -23,7 +23,7 @@ class HospitalModel {
   static HospitalModel fromMap(Map<String, dynamic> map) {
     return HospitalModel(
       uid: map['uid'],
-      name: map['name'],
+      hospitalname: map['hospitalname'],
       email: map['email'],
       imageUrl: map['imageUrl'],
     );

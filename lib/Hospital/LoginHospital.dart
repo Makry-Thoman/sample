@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zootopia/Controller/Hospital_Controller.dart';
-import 'package:zootopia/Controller/User_Controller.dart';
+import 'package:zootopia/Hospital/Hospital_home.dart';
 import 'package:zootopia/Hospital/RegisterHospital.dart';
-import 'package:zootopia/Signup.dart';
-import 'package:zootopia/Starting/userSelection.dart';
-import 'package:zootopia/bottomnavbar.dart';
-import 'package:zootopia/function/ForgotPassword.dart';
+
 class LoginHospital extends StatefulWidget {
   const LoginHospital({super.key});
 
@@ -18,7 +15,7 @@ class _LoginHospitalState extends State<LoginHospital> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordVisible = false;
-  final hospitalController _authController=hospitalController();
+  final hospitalController _hospitalController=hospitalController();
 
 
   @override
@@ -32,7 +29,7 @@ class _LoginHospitalState extends State<LoginHospital> {
     if (_formKey.currentState!.validate()) {
       String email =_emailController.text.trim();
       String password=_passwordController.text.trim();
-      String? result = await _authController.loginHospital(email, password);
+      String? result = await _hospitalController.loginHospital(email, password);
 
       if(result==null)
       {
@@ -41,7 +38,7 @@ class _LoginHospitalState extends State<LoginHospital> {
         );
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Bottomnavbar()),
+          MaterialPageRoute(builder: (context) => HospitalHome()),
         );
       } else
       {
@@ -166,7 +163,8 @@ class _LoginHospitalState extends State<LoginHospital> {
                                   foregroundColor: MaterialStateProperty.all(Colors.white)
                               ),
                               onPressed: () {
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Bottomnavbar()));                              }, child: Text('Test'))
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HospitalHome()));
+                                }, child: Text('Test'))
                       )
                     ],
                   )

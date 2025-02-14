@@ -16,12 +16,12 @@ class Registerhospital extends StatefulWidget {
 
 class _RegisterhospitalState extends State<Registerhospital> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
+  final _HnameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _repasswordController = TextEditingController();
-  final hospitalController _authController = hospitalController();
+  final hospitalController _hospitalController = hospitalController();
   File? _image;
   final ImagePicker _picker = ImagePicker();
 
@@ -59,8 +59,8 @@ class _RegisterhospitalState extends State<Registerhospital> {
         imageUrl = await _uploadImage(_image!);
       }
 
-      String? result = await _authController.registerHospital(
-        _nameController.text.trim(),
+      String? result = await _hospitalController.registerHospital(
+        _HnameController.text.trim(),
         _emailController.text.trim(),
         _passwordController.text.trim(),
         imageUrl,
@@ -92,7 +92,7 @@ class _RegisterhospitalState extends State<Registerhospital> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: ListView(
+          child: Column(
             children: [
               GestureDetector(
                 onTap: _pickImage,
@@ -105,7 +105,7 @@ class _RegisterhospitalState extends State<Registerhospital> {
               ),
               const SizedBox(height: 16),
               TextFormField(
-                controller: _nameController,
+                controller: _HnameController,
                 decoration: InputDecoration(
                     labelText: 'Hospital Name',
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),

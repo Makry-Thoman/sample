@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   // Set your desired width (it should be equal to height for a perfect circle)
                   child: CircleAvatar(
-                    radius: 140,
+                    radius: 100,
                     backgroundImage: AssetImage("asset/me.jpeg"),
                   ),
                 ),
@@ -74,6 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 foregroundColor: MaterialStateProperty.all(Colors.white)
                             ),
                             onPressed: () {
+                              Session.clearSession();
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(

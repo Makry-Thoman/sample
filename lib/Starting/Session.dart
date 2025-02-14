@@ -4,13 +4,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Session{
   static const String _emailKey ='email';
   static const _uuidkey = 'uid';
+  static const _modekey= 'mode';
 
   // email and Uuid save cheyan
-  static Future<void> saveSession(String email, String uuid) async
+  static Future<void> saveSession(String email, String uuid , String Mode) async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(_emailKey, email);
     await prefs.setString(_uuidkey, uuid);
+    await prefs.setString(_modekey, Mode);
   }
 
 
@@ -20,6 +22,7 @@ class Session{
     return{
       'email' : prefs.getString(_emailKey),
       'uid' : prefs.getString(_uuidkey),
+      'mode' : prefs.getString(_modekey),
     };
   }
 
@@ -36,6 +39,34 @@ class Session{
     try{
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('users')
+          .where('uid',isEqualTo: uuid)
+          .limit(1)
+          .get();
+      if(snapshot.docs.isNotEmpty){
+        return snapshot.docs.first.data() as Map<String, dynamic>;
+      }else{
+        return null;
+      }
+    }
+    catch(e){
+      print("Error fetching user details: $e");
+      return null;
+    }
+  }
+
+  // get Hospital details from firestore using email
+  static Future<Map<String, dynamic>?> getHospitalDetails() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uuid = prefs.getString(_uuidkey);
+
+    if (uuid==null)
+    {
+      return null;
+    }
+
+    try{
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('Hospital')
           .where('uid',isEqualTo: uuid)
           .limit(1)
           .get();

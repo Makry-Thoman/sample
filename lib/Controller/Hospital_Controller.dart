@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zootopia/Models/Hospital_Model.dart';
+import 'package:zootopia/Starting/Session.dart';
 
 
 class hospitalController{
@@ -9,7 +10,7 @@ class hospitalController{
   final FirebaseFirestore _firestore =FirebaseFirestore.instance;
 
   // register hospital
-  Future<String?> registerHospital(String name, String email, String password, String? imageUrl) async {
+  Future<String?> registerHospital(String hospitalname, String email, String password, String? imageUrl) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -18,7 +19,7 @@ class hospitalController{
 
       HospitalModel hospital = HospitalModel(
         uid: userCredential.user!.uid,
-        name: name,
+        hospitalname: hospitalname,
         email: email,
         imageUrl: imageUrl ?? "",
       );
@@ -39,6 +40,8 @@ class hospitalController{
         password: password,
       );
 
+      String userID =userCredential.user!.uid;
+
       // Check if user exists in Firestore
 
       DocumentSnapshot userDoc = await _firestore.collection("Hospital").doc(userCredential.user!.uid).get();
@@ -46,6 +49,8 @@ class hospitalController{
       if (!userDoc.exists) {
         return "Hospital not found in database"; // Prevents unauthorized logins
       }
+      String mode = 'Hospital';
+      await Session.saveSession(email, userID, mode);
 
       return null; // Success
     } on FirebaseAuthException catch (e) {

@@ -49,7 +49,8 @@ class UserController {
       if (!userDoc.exists) {
         return "User not found in database"; // Prevents unauthorized logins
       }
-      await Session.saveSession(email, userID);
+      String mode = 'User';
+      await Session.saveSession(email, userID, mode);
       return null; // Success
     } on FirebaseAuthException catch (e) {
       return e.message; // Return error message
