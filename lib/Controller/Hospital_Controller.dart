@@ -50,7 +50,9 @@ class hospitalController{
         return "Hospital not found in database"; // Prevents unauthorized logins
       }
       String mode = 'Hospital';
-      await Session.saveSession(email, userID, mode);
+      String photo = userDoc['imageUrl'] ?? ""; // image save cheyan anu session ayittu
+
+      await Session.saveSession(email, userID, mode ,photo);
 
       return null; // Success
     } on FirebaseAuthException catch (e) {

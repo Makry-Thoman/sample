@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zootopia/Hospital/Hospital_home.dart';
-import 'package:zootopia/Login_Page.dart';
-import 'package:zootopia/Pets%20Start%20-1.dart';
 import 'package:zootopia/Starting/Session.dart';
 import 'package:zootopia/Starting/userSelection.dart';
 import 'package:zootopia/bottomnavbar.dart';
-import 'package:zootopia/profile_page.dart';
 class Splass extends StatefulWidget {
   const Splass({super.key});
 

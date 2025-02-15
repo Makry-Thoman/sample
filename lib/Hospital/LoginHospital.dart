@@ -36,9 +36,10 @@ class _LoginHospitalState extends State<LoginHospital> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login successful!')),
         );
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HospitalHome()),
+              (route) => false,  // Removes all previous routes
         );
       } else
       {

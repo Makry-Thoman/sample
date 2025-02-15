@@ -88,88 +88,90 @@ class _RegisterhospitalState extends State<Registerhospital> {
         title: Image.asset('asset/ZootopiaAppWhite.png', height: 40),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: _pickImage,
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.grey[300],
-                  backgroundImage: _image != null ? FileImage(_image!) : null,
-                  child: _image == null ? Icon(Icons.camera_alt, size: 40) : null,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.grey[300],
+                    backgroundImage: _image != null ? FileImage(_image!) : null,
+                    child: _image == null ? Icon(Icons.camera_alt, size: 40) : null,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _HnameController,
-                decoration: InputDecoration(
-                    labelText: 'Hospital Name',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-                    prefixIcon: Icon(Icons.person)),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter Hospital name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                    labelText: 'Hospital Email',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-                    prefixIcon: Icon(Icons.email)),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter Hospital email';
-                  }
-                  final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-                  if (!emailRegex.hasMatch(value)) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-                    prefixIcon: Icon(Icons.lock)),
-                obscureText: true,
-                keyboardType: TextInputType.visiblePassword,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  final passwordRegex = RegExp(
-                      r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$');
-                  if (!passwordRegex.hasMatch(value)) {
-                    return 'Password must have at least 6 characters, include an uppercase letter, a lowercase letter, a number, and a special character';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black),
-                  foregroundColor: MaterialStateProperty.all(Colors.white),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _HnameController,
+                  decoration: InputDecoration(
+                      labelText: 'Hospital Name',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+                      prefixIcon: Icon(Icons.person)),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter Hospital name';
+                    }
+                    return null;
+                  },
                 ),
-                onPressed: _submitForm,
-                child: const Text(
-                  'Register',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                      labelText: 'Hospital Email',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+                      prefixIcon: Icon(Icons.email)),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter Hospital email';
+                    }
+                    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+                    if (!emailRegex.hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+                      prefixIcon: Icon(Icons.lock)),
+                  obscureText: true,
+                  keyboardType: TextInputType.visiblePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a password';
+                    }
+                    final passwordRegex = RegExp(
+                        r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$');
+                    if (!passwordRegex.hasMatch(value)) {
+                      return 'Password must have at least 6 characters, include an uppercase letter, a lowercase letter, a number, and a special character';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                  onPressed: _submitForm,
+                  child: const Text(
+                    'Register',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

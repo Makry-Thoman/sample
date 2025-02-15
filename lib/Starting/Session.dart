@@ -3,16 +3,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Session{
   static const String _emailKey ='email';
-  static const _uuidkey = 'uid';
-  static const _modekey= 'mode';
+  static const String _uuidKey = 'uid';
+  static const String _modeKey= 'mode';
+  static const String _photoKey = "image";
 
   // email and Uuid save cheyan
-  static Future<void> saveSession(String email, String uuid , String Mode) async
+  static Future<void> saveSession(String email, String uuid , String Mode ,String photo) async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(_emailKey, email);
-    await prefs.setString(_uuidkey, uuid);
-    await prefs.setString(_modekey, Mode);
+    await prefs.setString(_uuidKey, uuid);
+    await prefs.setString(_modeKey, Mode);
+    await prefs.setString(_photoKey, photo);
   }
 
 
@@ -21,15 +23,16 @@ class Session{
     SharedPreferences prefs =await SharedPreferences.getInstance();
     return{
       'email' : prefs.getString(_emailKey),
-      'uid' : prefs.getString(_uuidkey),
-      'mode' : prefs.getString(_modekey),
+      'uid' : prefs.getString(_uuidKey),
+      'mode' : prefs.getString(_modeKey),
+      'imageUrl' : prefs.getString(_photoKey),
     };
   }
 
   // get user details from firestore using email
   static Future<Map<String, dynamic>?> getUserDetails() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? uuid = prefs.getString(_uuidkey);
+    String? uuid = prefs.getString(_uuidKey);
 
     if (uuid==null)
       {
@@ -38,7 +41,7 @@ class Session{
 
     try{
       QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('Users')
           .where('uid',isEqualTo: uuid)
           .limit(1)
           .get();
@@ -57,7 +60,7 @@ class Session{
   // get Hospital details from firestore using email
   static Future<Map<String, dynamic>?> getHospitalDetails() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? uuid = prefs.getString(_uuidkey);
+    String? uuid = prefs.getString(_uuidKey);
 
     if (uuid==null)
     {
@@ -85,7 +88,7 @@ class Session{
   static Future<void> clearSession() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(_emailKey);
-    await prefs.remove(_uuidkey);
+    await prefs.remove(_uuidKey);
   }
 }
 
