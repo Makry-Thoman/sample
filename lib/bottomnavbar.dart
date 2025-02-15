@@ -17,7 +17,7 @@ class _BottomnavBarState extends State<Bottomnavbar> {
   int _selectedindex=0;
 
   final List<Widget> _pages = [
-    PetName(),
+    PetName (),
     Product(),
     const QRGenerator(),
     const ProfilePage(),

@@ -31,7 +31,7 @@ class _PetNameState extends State<PetName> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: MyDrawer(),
+        // drawer: MyDrawer(),
         appBar: zootopiaAppBar(),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(30.0),

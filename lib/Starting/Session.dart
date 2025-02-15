@@ -38,7 +38,7 @@ class Session{
 
     try{
       QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('Users')
           .where('uid',isEqualTo: uuid)
           .limit(1)
           .get();

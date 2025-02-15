@@ -1,31 +1,17 @@
 class UserModel {
-  late final String uid;
-  late final String name;
-  late final String email;
-  late final String password;
+  String uid;
+  String name;
+  String email;
+  String phone;
+  String imageUrl;
 
-
-/*
-  String get uid => _uid;
-
-  set uid(String value) {
-    _uid = value;
-  }
-*/
-
-
-
-  // final String phone;
-
-  UserModel(
-      {required String uid,
-      required String name,
-      required String email,
-      required String password})
-      : password = password,
-        email = email,
-        name = name,
-        uid = uid;
+  UserModel({
+    required this.uid,
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.imageUrl,
+  });
 
   // Convert UserModel to Map (for Firestore)
   Map<String, dynamic> toMap() {
@@ -33,7 +19,8 @@ class UserModel {
       'uid': uid,
       'name': name,
       'email': email,
-      'password': password,
+      'phoneNo':phone,
+      'imageUrl':imageUrl,
       // 'phone':phone,
     };
   }
@@ -41,15 +28,15 @@ class UserModel {
   // Convert Firestore document to UserModelz
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      uid: map['uid'] ?? '',
-      name: map['name'] ?? '',
-      email: map['email'] ?? '',
-      password: map['password'] ?? '',
-      // phone: map['phone'] ?? '',
+      uid: map['uid'] ,
+      name: map['name'],
+      email: map['email'],
+      phone: map['phoneNo'],
+      imageUrl: map['imageUrl'],
     );
   }
 
- /* String get name => _name;
+/* String get name => _name;
 
   set name(String value) {
     _name = value;

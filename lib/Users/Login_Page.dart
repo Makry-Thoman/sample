@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zootopia/Controller/User_Controller.dart';
-import 'package:zootopia/HomePage.dart';
-import 'package:zootopia/Signup.dart';
-import 'package:zootopia/Starting/userSelection.dart';
+import 'package:zootopia/Users/Signup.dart';
 import 'package:zootopia/bottomnavbar.dart';
 import 'package:zootopia/function/ForgotPassword.dart';
 
@@ -18,8 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordVisible = false;
-  final UserController _authController=UserController();
-
+  bool _isLoading = false;
+  final UserController _userController = UserController();
 
   @override
   void dispose() {
@@ -30,31 +28,36 @@ class _LoginPageState extends State<LoginPage> {
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      String email =_emailController.text.trim();
-      String password=_passwordController.text.trim();
-      String? result = await _authController.loginUser(email, password);
+      setState(() {
+        _isLoading = true;
+      });
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+      String? result = await _userController.loginUser(email, password);
 
-      if(result==null)
-      {
+      if (result == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login successful!')),
         );
-        Navigator.push(
+
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => Bottomnavbar()),
         );
-      } else
-      {
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(result)),
         );
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -101,7 +104,9 @@ class _LoginPageState extends State<LoginPage> {
                                     _passwordVisible = !_passwordVisible;
                                   });
                                 },
-                                icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off)),
+                                icon: Icon(_passwordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off)),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25))),
                         obscureText: !_passwordVisible,
@@ -127,41 +132,63 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text("Forgot Password?")),
                         ],
                       ),
-                      SizedBox(
-                          width: 150,
-                          height: 40,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(Colors.black),
-                              foregroundColor: MaterialStateProperty.all(Colors.white)
-                            ),
-                              onPressed: _submitForm, child: Text('Login'))
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                          width: 150,
-                          height: 40,
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(Colors.black),
-                                  foregroundColor: MaterialStateProperty.all(Colors.white)
-                              ),
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => UserForm()));
-                              }, child: Text('Sign Up'))
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                          width: 150,
-                          height: 40,
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(Colors.black),
-                                  foregroundColor: MaterialStateProperty.all(Colors.white)
-                              ),
-                              onPressed: () {
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Bottomnavbar()));                              }, child: Text('Test'))
-                      )
+                      _isLoading
+                          ? CircularProgressIndicator()
+                          : Column(children: [
+                              SizedBox(
+                                  width: 150,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.black),
+                                          foregroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.white)),
+                                      onPressed: _submitForm,
+                                      child: Text('Login'))),
+                              const SizedBox(height: 16),
+                              SizedBox(
+                                  width: 150,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.black),
+                                          foregroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.white)),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UserForm()));
+                                      },
+                                      child: Text('Sign Up'))),
+                              const SizedBox(height: 16),
+                              SizedBox(
+                                  width: 150,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.black),
+                                          foregroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.white)),
+                                      onPressed: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Bottomnavbar()));
+                                      },
+                                      child: Text('Test')))
+                            ])
                     ],
                   )
                 ],
