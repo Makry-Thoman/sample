@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:zootopia/Animaltype.dart';
-import 'package:zootopia/HomePage.dart';
+
 import 'package:zootopia/function/AppbarZootioia.dart';
 import 'package:zootopia/function/DrawerBar.dart';
 
@@ -152,7 +152,9 @@ class _PetNameState extends State<PetName> {
                     if (_formKey.currentState!.validate() && gender != null) {
                       print(
                           'Pet Name: ${_petNameController.text}, Gender: $gender, DOB: ${_dobController.text}');
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => ChoosePetType(),));
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => ChoosePetType(petName: _petNameController.text,
+                        dob: _dobController.text,
+                        gender: gender!,),));
 
                       // ScaffoldMessenger.of(context)
                       //     .showSnackBar(SnackBar(content: Text("Successful logged in${_petNameController.text}")));

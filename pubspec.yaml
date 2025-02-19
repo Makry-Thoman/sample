@@ -53,7 +53,7 @@ dependencies:
   qr_flutter: ^4.1.0
   screenshot: ^3.0.0
   permission_handler: ^11.3.1
-  image_gallery_saver: ^2.0.3
+#  image_gallery_saver: ^2.0.3
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +90,7 @@ flutter:
       - asset/a.png
       - asset/ZootopiaAppWhite.png
       - asset/me.jpeg
+      - asset/White_cat.png
       - asset/or.png
       - asset/image.png
       - asset/CreatePet.png

@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:zootopia/Users/Pets.dart';
+import 'package:zootopia/Users/new.dart';
+import 'package:zootopia/function/AppbarZootioia.dart';
 
 class ChoosePetType extends StatefulWidget {
-  const ChoosePetType({super.key});
+  final String petName;
+  final String dob;
+  final String gender;
+
+  ChoosePetType(
+      {Key? key,
+      required this.petName,
+      required this.dob,
+      required this.gender});
 
   @override
   State<ChoosePetType> createState() => _ChoosePetTypeState();
@@ -9,41 +20,46 @@ class ChoosePetType extends StatefulWidget {
 
 class _ChoosePetTypeState extends State<ChoosePetType> {
   final List<Map<String, String>> petTypes = [
-    {'name': 'Dog', 'icon': '🐶'},
-    {'name': 'Cat', 'icon': '🐱'},
-    {'name': 'Mouse', 'icon': '🐭'},
-    {'name': 'Lizard', 'icon': '🦎'},
-    {'name': 'Fish', 'icon': '🐟'},
-    {'name': 'Ferret', 'icon': '🦦'},
-    {'name': 'Chinchilla', 'icon': '🐹'},
-    {'name': 'Snake', 'icon': '🐍'},
-    {'name': 'Turtle', 'icon': '🐢'},
-    {'name': 'Rabbit', 'icon': '🐰'},
-    {'name': 'Guinea pig', 'icon': '🐹'},
-    {'name': 'Horse', 'icon': '🐴'},
-    {'name': 'Donkey', 'icon': '🐴'},
-    {'name': 'Pig', 'icon': '🐷'},
-    {'name': 'Goat', 'icon': '🐐'},
-    {'name': 'Sheep', 'icon': '🐑'},
-    {'name': 'Cattle', 'icon': '🐄'},
-    {'name': 'Bird', 'icon': '🐦'},
-    {'name': 'Chicken', 'icon': '🐔'},
-    {'name': 'Duck', 'icon': '🦆'},
+    {'category': 'Dog', 'icon': '🐶'},
+    {'category': 'Cat', 'icon': '🐱'},
+    {'category': 'Mouse', 'icon': '🐭'},
+    {'category': 'Lizard', 'icon': '🦎'},
+    {'category': 'Fish', 'icon': '🐟'},
+    {'category': 'Ferret', 'icon': '🦦'},
+    {'category': 'Chinchilla', 'icon': '🐹'},
+    {'category': 'Snake', 'icon': '🐍'},
+    {'category': 'Turtle', 'icon': '🐢'},
+    {'category': 'Rabbit', 'icon': '🐰'},
+    {'category': 'Guinea pig', 'icon': '🐹'},
+    {'category': 'Horse', 'icon': '🐴'},
+    {'category': 'Donkey', 'icon': '🐴'},
+    {'category': 'Pig', 'icon': '🐷'},
+    {'category': 'Goat', 'icon': '🐐'},
+    {'category': 'Sheep', 'icon': '🐑'},
+    {'category': 'Cattle', 'icon': '🐄'},
+    {'category': 'Bird', 'icon': '🐦'},
+    {'category': 'Chicken', 'icon': '🐔'},
+    {'category': 'Duck', 'icon': '🦆'},
   ];
 
   String searchQuery = '';
 
+  Future<void> _selectPet(BuildContext context,String Category) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => petBreed(petcategory: Category, petName: widget.petName, dob: widget.dob, gender: widget.gender),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> filteredPets = petTypes
+        .where((pet) => pet['category']!.toLowerCase().contains(searchQuery))
+        .toList();
+
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text('Choose a pet type'),
-        centerTitle: true,
-      ),
+      appBar: zootopiaAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -51,7 +67,7 @@ class _ChoosePetTypeState extends State<ChoosePetType> {
             TextField(
               decoration: InputDecoration(
                 hintText: 'Search',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 filled: true,
                 fillColor: Colors.grey[200],
                 border: OutlineInputBorder(
@@ -65,45 +81,45 @@ class _ChoosePetTypeState extends State<ChoosePetType> {
                 });
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: GridView.builder(
-                padding: const EdgeInsets.only(bottom: 10), // Added padding to prevent overflow
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                padding: const EdgeInsets.only(bottom: 10),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
                 ),
-                itemCount: petTypes.length,
+                itemCount: filteredPets.length,
                 itemBuilder: (context, index) {
-                  final pet = petTypes[index];
-                  if (pet['name']!.toLowerCase().contains(searchQuery)) {
-                    return Column(
+                  final pet = filteredPets[index];
+                  return GestureDetector(
+                    onTap: () => _selectPet(context, pet['category']!), // Pass pet category
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CircleAvatar(
                           radius: 30,
-                          backgroundColor: Colors.amber,
+                          backgroundColor: Colors.black,
                           child: Text(
                             pet['icon']!,
-                            style: TextStyle(fontSize: 30),
+                            style: const TextStyle(fontSize: 30),
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(
-                          pet['name']!,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          pet['category']!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
+                    ),
+                  );
                 },
               ),
             ),
           ],
         ),
       ),
-
     );
   }
 }
