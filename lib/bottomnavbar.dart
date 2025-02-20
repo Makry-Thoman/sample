@@ -3,6 +3,8 @@ import 'package:zootopia/Pets%20Start%20-1.dart';
 import 'package:zootopia/ShopingPage.dart';
 import 'package:zootopia/Users/Pets.dart';
 import 'package:zootopia/Users/QR.dart';
+import 'package:zootopia/Users/QR_CODE.dart';
+import 'package:zootopia/Users/qr_code_generator.dart';
 import 'package:zootopia/profile_page.dart';
 class Bottomnavbar extends StatefulWidget {
   const Bottomnavbar({super.key});
@@ -17,7 +19,7 @@ class _BottomnavBarState extends State<Bottomnavbar> {
   final List<Widget> _pages = [
     petsPage(),
     Product(),
-    const QRCode(),
+    QRCode(),
     const ProfilePage(),
 
   ];

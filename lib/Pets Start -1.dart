@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:zootopia/Animaltype.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
+import 'package:zootopia/Animaltype.dart';
 import 'package:zootopia/function/AppbarZootioia.dart';
 import 'package:zootopia/function/DrawerBar.dart';
 
@@ -17,13 +19,24 @@ class _PetNameState extends State<PetName> {
   final _petNameController = TextEditingController();
   final _dobController = TextEditingController();
   String? gender;
+  File? _image;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context, firstDate: DateTime(2000), lastDate: DateTime.now());
     if (picked != null) {
       setState(() {
-        _dobController.text = DateFormat('MMM d,yyyy').format(picked);
+        _dobController.text = DateFormat('MMM d, yyyy').format(picked);
+      });
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile =
+    await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
       });
     }
   }
@@ -45,18 +58,30 @@ class _PetNameState extends State<PetName> {
                     "It takes 20 seconds!",
                     style: TextStyle(fontSize: 25),
                   ),
-                  Container(
-                      height: 200,
-                      child: Image(image: AssetImage('asset/CreatePet.png'))),
+                  SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.grey[300],
+                      backgroundImage: _image != null ? FileImage(_image!) : null,
+                      child: _image == null
+                          ? Icon(Icons.camera_alt, size: 40, color: Colors.black54)
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextButton(
+                    onPressed: _pickImage,
+                    child: Text("Upload Pet's Photo"),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    // Space between label and TextField
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Pet Name', // Label text
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        'Pet Name',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -79,21 +104,13 @@ class _PetNameState extends State<PetName> {
                       value: 'male',
                       groupValue: gender,
                       onChanged: (value) {
-                        setState(
-                          () {
-                            gender = value;
-                          },
-                        );
+                        setState(() {
+                          gender = value;
+                        });
                       },
                     ),
-                    Icon(
-                      Icons.male,
-                      color: Colors.blue,
-                    ),
-                    Text(
-                      'Male',
-                      style: TextStyle(fontSize: 18),
-                    ),
+                    Icon(Icons.male, color: Colors.blue),
+                    Text('Male', style: TextStyle(fontSize: 18)),
                     SizedBox(width: 25),
                     Radio(
                       value: 'female',
@@ -105,67 +122,70 @@ class _PetNameState extends State<PetName> {
                       },
                     ),
                     Icon(Icons.female, color: Colors.pink),
-                    Text(
-                      'Female',
-                      style: TextStyle(fontSize: 18),
-                    )
+                    Text('Female', style: TextStyle(fontSize: 18))
                   ]),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    // Space between label and TextField
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Pet's date of birth", // Label text
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        "Pet's date of birth",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                   GestureDetector(
                     onTap: () => _selectDate(context),
-                    child:AbsorbPointer(child:  TextFormField(
-                      controller: _dobController,
-                      decoration: InputDecoration(
-                          hintText: 'Select date of brith of your pet',
-                          prefixIcon: Icon(Icons.calendar_today),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          )),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select date of birth';
-                        }
-                        return null;
-                      },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: _dobController,
+                        decoration: InputDecoration(
+                            hintText: 'Select date of birth',
+                            prefixIcon: Icon(Icons.calendar_today),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            )),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please select date of birth';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
-                    )
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 20),
                   ElevatedButton(
-                    style: ButtonStyle(     backgroundColor: MaterialStateProperty.all(Colors.black),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.black),
                         foregroundColor: MaterialStateProperty.all(Colors.white)),
                     onPressed: () {
-                    if (_formKey.currentState!.validate() && gender != null) {
-                      print(
-                          'Pet Name: ${_petNameController.text}, Gender: $gender, DOB: ${_dobController.text}');
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => ChoosePetType(petName: _petNameController.text,
-                        dob: _dobController.text,
-                        gender: gender!,),));
-
-                      // ScaffoldMessenger.of(context)
-                      //     .showSnackBar(SnackBar(content: Text("Successful logged in${_petNameController.text}")));
-                    }
-                    else if (gender == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Please select a gender $PetName')),
-                      );
-                    }
-
-                  },
+                      if (_formKey.currentState!.validate() &&
+                          gender != null &&
+                          _image != null) {
+                        print(
+                            'Pet Name: ${_petNameController.text}, Gender: $gender, DOB: ${_dobController.text}, Image Path: ${_image!.path}');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChoosePetType(
+                              petName: _petNameController.text,
+                              dob: _dobController.text,
+                              gender: gender!,
+                            ),
+                          ),
+                        );
+                      } else if (gender == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Please select a gender')),
+                        );
+                      } else if (_image == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Please upload a pet photo')),
+                        );
+                      }
+                    },
                     child: Text('Continue'),
                   )
                 ],
