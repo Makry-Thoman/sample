@@ -1,6 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zootopia/Models/user_Model.dart';
 import 'package:zootopia/Starting/Session.dart';
 
@@ -64,6 +65,34 @@ class UserController {
   // Future<void> logoutUser() async {
   //   await _auth.signOut();
   // }
+
+//pet details getting
+  static Future<Map<String, dynamic>?> getPetsDetails() async{
+    Map<String, String?> sessionData = await Session.getSession(); // Fetch from SharedPreferences
+    String? ownerID = sessionData['uid'];
+
+    if (ownerID==null)
+    {
+      return null;
+    }
+
+    try{
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('Pets details')
+          .where('ownerID',isEqualTo: ownerID)
+          .limit(0)
+          .get();
+      if(snapshot.docs.isNotEmpty){
+        return snapshot.docs.first.data() as Map<String, dynamic>;
+      }else{
+        return null;
+      }
+    }
+    catch(e){
+      print("Error fetching Pet details: $e");
+      return null;
+    }
+  }
 
 
 }

@@ -32,14 +32,39 @@ class _PetNameState extends State<PetName> {
   }
 
   Future<void> _pickImage() async {
-    final pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              leading: Icon(Icons.camera),
+              title: Text("Take Photo"),
+              onTap: () async {
+                final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+                if (pickedFile != null) {
+                  setState(() => _image = File(pickedFile.path));
+                }
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.image),
+              title: Text("Choose from Gallery"),
+              onTap: () async {
+                final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+                if (pickedFile != null) {
+                  setState(() => _image = File(pickedFile.path));
+                }
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -160,33 +185,26 @@ class _PetNameState extends State<PetName> {
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.black),
                         foregroundColor: MaterialStateProperty.all(Colors.white)),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate() &&
-                          gender != null &&
-                          _image != null) {
-                        print(
-                            'Pet Name: ${_petNameController.text}, Gender: $gender, DOB: ${_dobController.text}, Image Path: ${_image!.path}');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChoosePetType(
-                              petName: _petNameController.text,
-                              dob: _dobController.text,
-                              gender: gender!,
+                      onPressed: () {
+                        if (_formKey.currentState!.validate() && gender != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChoosePetType(
+                                petName: _petNameController.text,
+                                dob: _dobController.text,
+                                gender: gender!,
+                                petPhoto: _image,
+                              ),
                             ),
-                          ),
-                        );
-                      } else if (gender == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Please select a gender')),
-                        );
-                      } else if (_image == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Please upload a pet photo')),
-                        );
-                      }
-                    },
-                    child: Text('Continue'),
+                          );
+                        } else if (gender == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Please select a gender')),
+                          );
+                        }
+                      },
+                      child: Text('Continue'),
                   )
                 ],
               ),

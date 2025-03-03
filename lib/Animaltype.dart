@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:zootopia/Users/Pets.dart';
 import 'package:zootopia/Users/new.dart';
 import 'package:zootopia/function/AppbarZootioia.dart';
 
@@ -7,12 +8,14 @@ class ChoosePetType extends StatefulWidget {
   final String petName;
   final String dob;
   final String gender;
+  final File? petPhoto;
 
   ChoosePetType(
       {Key? key,
       required this.petName,
       required this.dob,
-      required this.gender});
+      required this.gender,
+      required this.petPhoto});
 
   @override
   State<ChoosePetType> createState() => _ChoosePetTypeState();
@@ -48,7 +51,7 @@ class _ChoosePetTypeState extends State<ChoosePetType> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => petBreed(petcategory: Category, petName: widget.petName, dob: widget.dob, gender: widget.gender),
+          builder: (context) => petBreed(petcategory: Category, petName: widget.petName, dob: widget.dob, gender: widget.gender, petPhoto: widget.petPhoto),
         ));
   }
 
@@ -77,7 +80,7 @@ class _ChoosePetTypeState extends State<ChoosePetType> {
               ),
               onChanged: (value) {
                 setState(() {
-                  searchQuery = value.toLowerCase();
+                  searchQuery = value.toLowerCase().trim();
                 });
               },
             ),
@@ -85,10 +88,11 @@ class _ChoosePetTypeState extends State<ChoosePetType> {
             Expanded(
               child: GridView.builder(
                 padding: const EdgeInsets.only(bottom: 10),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 15, // Increase spacing
+                  mainAxisSpacing: 15,
+                  childAspectRatio: 1.2, // Adjust aspect ratio for uniform spacing
                 ),
                 itemCount: filteredPets.length,
                 itemBuilder: (context, index) {

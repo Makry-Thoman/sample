@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:zootopia/Starting/Session.dart';
 import 'package:zootopia/Users/Pets.dart';
+import 'package:zootopia/bottomnavbar.dart';
 import 'package:zootopia/function/AppbarZootioia.dart';
 
 class petBreed extends StatefulWidget {
@@ -8,13 +13,15 @@ class petBreed extends StatefulWidget {
   final String petName;
   final String dob;
   final String gender;
+  final File? petPhoto;
 
   const petBreed(
       {Key? key,
-      required this.petcategory,
-      required this.petName,
-      required this.dob,
-      required this.gender});
+        required this.petcategory,
+        required this.petName,
+        required this.dob,
+        required this.gender,
+        required this.petPhoto});
 
   @override
   State<petBreed> createState() => _petBreedState();
@@ -25,6 +32,22 @@ class _petBreedState extends State<petBreed> {
   final _breedController = TextEditingController();
   final _petColorController = TextEditingController();
   bool _isLoading = false;
+  late String uidd;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  Future<String?> getData() async {
+    Map<String, String?> sessionData =  await Session.getSession();
+
+    print(sessionData['uid']);
+    uidd=sessionData['uid']!;
+    return uidd;
+  }
 
 
   void _submitForm() async {
@@ -36,33 +59,67 @@ class _petBreedState extends State<petBreed> {
       // Get values from form fields
       String breed = _breedController.text.trim();
       String petcolor = _petColorController.text.trim();
+      String? imageUrl;
 
       try {
-        // Firestore reference
-        CollectionReference pets = FirebaseFirestore.instance.collection('Pets details');
+        // Check if petPhoto is available
+        if (widget.petPhoto != null) {
+          // Create a reference to Firebase Storage
+          Reference storageRef = FirebaseStorage.instance
+              .ref()
+              .child('pet_images/${DateTime.now().millisecondsSinceEpoch}.jpg');
 
-        // Add pet data
-        await pets.add({
+          // Upload file to Firebase Storage
+          UploadTask uploadTask = storageRef.putFile(widget.petPhoto!);
+          TaskSnapshot snapshot = await uploadTask;
+
+          // Get download URL
+          imageUrl = await snapshot.ref.getDownloadURL();
+        }
+
+        // Firestore reference
+        // CollectionReference pets = FirebaseFirestore.instance.collection('Pets details');
+        String petId = FirebaseFirestore.instance.collection('Pets details').doc().id;
+
+        // debugPrint(uidd);
+        // Add pet data to Firestore
+        await FirebaseFirestore.instance.collection('Pets details').doc(petId).set({
+          'petID': petId,
+          'ownerID':uidd,
           'petcategory': widget.petcategory,
           'petName': widget.petName,
           'dob': widget.dob,
           'gender': widget.gender,
           'breed': breed,
           'petcolor': petcolor,
+          'imageUrl': imageUrl ?? "", // Store the image URL
           'createdAt': FieldValue.serverTimestamp(), // Timestamp for sorting
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-
-          SnackBar(content: Text('Pet details added successfully!')
-          ),
-
+          SnackBar(content: Text('Pet details added successfully!')),
         );
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => petsPage(),), (route) => false);
+
+        // Navigate to the pets page
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => petsPage()),
+        //       (route) => false,
+        // );
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Bottomnavbar(initialIndex: 0), // 0 for PetsPage
+          ),
+              (route) => false,
+        );
 
         // Clear form fields
         _breedController.clear();
         _petColorController.clear();
+
+
+
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to add pet: $e')),

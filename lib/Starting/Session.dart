@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Session{
@@ -86,9 +87,12 @@ class Session{
   }
 
   static Future<void> clearSession() async{
+    final FirebaseAuth _auth = FirebaseAuth.instance;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(_emailKey);
     await prefs.remove(_uuidKey);
+    await prefs.remove(_photoKey);
+    await _auth.signOut();
   }
 }
 

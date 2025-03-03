@@ -105,7 +105,7 @@ class _QRCodeState extends State<QRCode> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => QRCodeGenerator(qrData: _qrData),
+                        builder: (context) => QRCodeGenerator(qrData: _qrData, pet_name: _petNameController.text ),
                       ));
                 },
                 child: const Text('Generate QR code'),
