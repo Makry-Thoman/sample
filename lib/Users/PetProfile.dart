@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:zootopia/Users/Edit_Pet.dart';
 import 'package:zootopia/Users/MedicalRecordsScreen.dart';
+import 'package:zootopia/Users/Pets.dart';
 import 'package:zootopia/Users/User_Controller/Pet_Contoller.dart';
 import 'package:zootopia/Users/VaccinationScreen.dart';
 import 'package:zootopia/function/AppbarZootioia.dart';
@@ -16,6 +19,11 @@ class PetProfile extends StatefulWidget {
 class _PetProfileState extends State<PetProfile> {
   String? _petName;
   String? _petPhoto;
+  String? _petAge;
+  String? _petGender;
+  String? _petBreed;
+  String? _petCategory;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -27,79 +35,160 @@ class _PetProfileState extends State<PetProfile> {
     Map<String, dynamic>? petData = await getPetDetails(widget.PetID);
 
     setState(() {
+      _petAge = calculateAge(petData?['dob']);
       _petName = petData?['petName'] ?? "Unknown Pet";
       _petPhoto = petData?['imageUrl'];
+      _petGender = petData?['gender'];
+      _petBreed = petData?['breed'];
+      _petCategory = petData?['petcategory'];
+      isLoading = false;
     });
+  }
+
+
+  void confirmDeletePet(String petID) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Delete Pet"),
+        content: Text("Are you sure you want to delete this pet?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context); // Close the dialog
+              Navigator.pop(context); // Go back to the previous page
+
+              await deletePet(petID); // Delete the pet from Firestore
+
+            },
+            child: Text("Delete", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
+
+
+
+
+  String calculateAge(String? dob) {
+    if (dob == null || dob.isEmpty) return "Unknown Age";
+    try {
+      DateTime birthDate = DateFormat("MMM d, yyyy").parse(dob);
+      DateTime today = DateTime.now();
+      int years = today.year - birthDate.year;
+      int months = today.month - birthDate.month;
+      if (months < 0) {
+        years -= 1;
+        months += 12;
+      }
+      return years > 0 ? "$years years, $months months" : "$months months";
+    } catch (e) {
+      return "Invalid DOB Format";
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: zootopiaAppBar(),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: _petPhoto != null && _petPhoto!.isNotEmpty
-                    ? NetworkImage(_petPhoto!)
-                    : AssetImage("asset/a.png") as ImageProvider,
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.edit, size: 24, color: Colors.black),
+                    onPressed: () async {
+                      bool? isUpdated = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditPetScreen(petID: widget.PetID),
+                        ),
+                      );
+
+                      // Refresh pet details only if an update occurred
+                      if (isUpdated == true) {
+                        fetchPetInfo();  // Refresh pet details
+                      }
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () => confirmDeletePet(widget.PetID),
+                  ),
+
+                ],
               ),
-              GestureDetector(
-                onTap: () {
-                  // Add logic to update pet photo
-                },
-                child: CircleAvatar(
-                  radius: 15,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.camera_alt, size: 18, color: Colors.black),
+            CircleAvatar(
+              radius: 60,
+              backgroundImage: _petPhoto != null && _petPhoto!.isNotEmpty
+                  ? NetworkImage(_petPhoto!)
+                  : AssetImage("asset/a.png") as ImageProvider,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              _petName ?? "Loading...",
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              _petAge ?? "Calculating age...",
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
+            Card(
+              elevation: 3,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _infoRow("Gender", _petGender),
+                    _infoRow("Category", _petCategory),
+                    _infoRow("Breed", _petBreed),
+                  ],
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            _petName ?? "Loading...",
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _actionButton("Add", Icons.add, () {
-                // Navigate to Add Pet screen
-              }),
-              _actionButton("Edit", Icons.edit, () {
-                // Navigate to Edit Pet screen
-              }),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              padding: const EdgeInsets.all(10),
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              children: [
-                _gridItem("Vaccination", Icons.medical_services, VaccinationScreen()),
-                _gridItem("Medical Records", Icons.book, MedicalRecordsScreen()),
-                // _gridItem("Reminders", Icons.notifications, RemindersScreen()),
-                // _gridItem("Weight", Icons.monitor_weight, WeightScreen()),
-              ],
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 2,
+                padding: const EdgeInsets.all(10),
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                children: [
+                  _gridItem("Vaccination", Icons.medical_services, VaccinationScreen()),
+                  _gridItem("Medical Records", Icons.book, MedicalRecordsPage(petID: widget.PetID)),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.pets), label: "Pets"),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "Calendar"),
-          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: "Records"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
+    );
+  }
+
+  Widget _infoRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          Text(value ?? "N/A", style: TextStyle(fontSize: 16, color: Colors.grey[700])),
         ],
       ),
     );
@@ -108,18 +197,16 @@ class _PetProfileState extends State<PetProfile> {
   Widget _actionButton(String label, IconData icon, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              child: Icon(icon, size: 20),
-            ),
-            const SizedBox(height: 5),
-            Text(label, style: const TextStyle(fontSize: 12)),
-          ],
-        ),
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 25,
+            backgroundColor: Colors.blueAccent.withOpacity(0.1),
+            child: Icon(icon, size: 28, color: Colors.blueAccent),
+          ),
+          const SizedBox(height: 5),
+          Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        ],
       ),
     );
   }
