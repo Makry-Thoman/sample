@@ -6,52 +6,14 @@ import 'package:zootopia/Users/PetCard.dart';
 import 'package:zootopia/Users/PetProfile.dart';
 import 'package:zootopia/function/AppbarZootioia.dart';
 
-class petsPage extends StatefulWidget {
-  const petsPage({super.key});
+class PetsPage extends StatefulWidget {
+  const PetsPage({super.key});
 
   @override
-  State<petsPage> createState() => _petsPageState();
+  State<PetsPage> createState() => _PetsPageState();
 }
 
-
-class _petsPageState extends State<petsPage> {
- // List<Map<String, dynamic>> products = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchProducts();
-  }
-
-  Future<void> fetchProducts() async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('Pets details')
-          .orderBy('timestamp', descending: true)
-          .get();
-
-      List<Map<String, dynamic>> fetchedProducts =
-      querySnapshot.docs.map((doc) {
-        return {
-          'id': doc.id,
-         /* 'name': doc['name'] ?? '',
-          'price': doc['price'] ?? 0.0,
-          'description': doc['description'] ?? '',*/
-        };
-      }).toList();
-
-      setState(() {
-      //  products = fetchedProducts;
-        // isLoading = false;
-      });
-    } catch (e) {
-      print('Error fetching products: $e');
-      setState(() {
-        // isLoading = false;
-      });
-    }
-  }
-
+class _PetsPageState extends State<PetsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,10 +21,9 @@ class _petsPageState extends State<petsPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PetName(),
-              ));
+            context,
+            MaterialPageRoute(builder: (context) => PetName()),
+          );
         },
         backgroundColor: Colors.grey,
         child: const Icon(
@@ -71,32 +32,32 @@ class _petsPageState extends State<petsPage> {
           size: 40,
         ),
       ),
-      body: StreamBuilder(
-
+      body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, userSnapshot) {
           if (userSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (!userSnapshot.hasData || userSnapshot.data == null) {
-            return Center(child: Text("User not logged in"));
+            return const Center(child: Text("User not logged in"));
           }
 
-          String userId = userSnapshot.data!.uid; // Get the current user's UID
-  print(userId);
+          String userId = userSnapshot.data!.uid; // Current user's UID
+
           return StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('Pets details')
-                .where('ownerID', isEqualTo: userId) // Filter by current user
+                .where('ownerID', isEqualTo: userId) // Filter by user ID
+                // .orderBy('createdAt', descending: true) // Ensure correct ordering
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
 
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return Center(child: Text("No pet data available."));
+                return const Center(child: Text("No pet data available."));
               }
 
               var petDocs = snapshot.data!.docs;
@@ -104,21 +65,22 @@ class _petsPageState extends State<petsPage> {
               return ListView.builder(
                 itemCount: petDocs.length,
                 itemBuilder: (context, index) {
-                  var pet = petDocs[index];
+                  var pet = petDocs[index].data() as Map<String, dynamic>?;
+
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PetProfile(PetID: pet.id),
+                          builder: (context) => PetProfile(PetID: petDocs[index].id),
                         ),
                       );
                     },
                     child: PetCard(
-                      petName: pet['petName'],
+                      petName: pet?['petName'] ?? 'Unknown Pet',
                       description: "Adorable and friendly!",
-                      imageUrl: pet['imageUrl'],
-                      price: 75,
+                      imageUrl: pet?['imageUrl'] ?? '',
+                      price: 75, // Hardcoded, consider removing if unused
                       rating: 3.5,
                       isFavorite: true,
                     ),

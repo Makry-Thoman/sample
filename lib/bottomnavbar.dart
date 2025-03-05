@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zootopia/Pets%20Start%20-1.dart';
 import 'package:zootopia/ShopingPage.dart';
 import 'package:zootopia/Users/Pets.dart';
 import 'package:zootopia/Users/QR.dart';
-import 'package:zootopia/Users/QR_CODE.dart';
-import 'package:zootopia/Users/qr_code_generator.dart';
 import 'package:zootopia/profile_page.dart';class Bottomnavbar extends StatefulWidget {
   final int initialIndex;
   const Bottomnavbar({super.key, this.initialIndex = 0});
@@ -23,7 +20,7 @@ class _BottomnavBarState extends State<Bottomnavbar> {
   }
 
   final List<Widget> _pages = [
-    petsPage(),
+    PetsPage(),
     Product(),
     QRCode(),
     const ProfilePage(),

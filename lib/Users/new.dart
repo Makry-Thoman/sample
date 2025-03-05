@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -49,6 +50,22 @@ class _petBreedState extends State<petBreed> {
     return uidd;
   }
 
+  String generatePetId(String petCategory) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    final random = Random();
+
+    // Ensure pet category has at least 4 characters, if not, pad with 'X'
+    String categoryPart = (petCategory.length >= 4)
+        ? petCategory.substring(0, 4).toUpperCase()
+        : petCategory.toUpperCase().padRight(4, 'X');
+
+    // Get last 6 digits of timestamp
+    String timestampPart = DateTime.now().millisecondsSinceEpoch.toString().substring(7, 13);
+
+    return categoryPart + timestampPart; // Total 10 characters
+  }
+
+
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -79,7 +96,7 @@ class _petBreedState extends State<petBreed> {
 
         // Firestore reference
         // CollectionReference pets = FirebaseFirestore.instance.collection('Pets details');
-        String petId = FirebaseFirestore.instance.collection('Pets details').doc().id;
+        String petId = generatePetId(widget.petcategory);
 
         // debugPrint(uidd);
         // Add pet data to Firestore
