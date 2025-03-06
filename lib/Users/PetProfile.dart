@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:zootopia/Users/Edit_Pet.dart';
 import 'package:zootopia/Users/MedicalRecordsScreen.dart';
+import 'package:zootopia/Users/Medical_History_Page.dart';
 import 'package:zootopia/Users/Pets.dart';
 import 'package:zootopia/Users/User_Controller/Pet_Contoller.dart';
 import 'package:zootopia/Users/VaccinationScreen.dart';
@@ -171,7 +172,7 @@ class _PetProfileState extends State<PetProfile> {
                 mainAxisSpacing: 10,
                 children: [
                   _gridItem("Vaccination", Icons.medical_services, VaccinationScreen()),
-                  _gridItem("Medical Records", Icons.book, MedicalRecordsPage(petID: widget.PetID)),
+                  _gridItem("Medical Records", Icons.book, MedicalHistoryPage(petID: widget.PetID)),
                 ],
               ),
             ),

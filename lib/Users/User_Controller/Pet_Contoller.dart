@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future<Map<String, dynamic>?> getPetDetails(String uid) async {
   try {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('Pets details')
+        .collection('Pets_details')
         .where('petID', isEqualTo: uid)
         .limit(1)
         .get();
@@ -24,7 +24,7 @@ Future<Map<String, dynamic>?> getPetDetails(String uid) async {
 Future<void> deletePet(String petID) async {
   try {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('Pets details')
+        .collection('Pets_details')
         .where('petID', isEqualTo: petID)
         .limit(1)
         .get();

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:zootopia/Users/new.dart';
+import 'package:zootopia/Users/pet_breed_last.dart';
 import 'package:zootopia/function/AppbarZootioia.dart';
 
 class ChoosePetType extends StatefulWidget {

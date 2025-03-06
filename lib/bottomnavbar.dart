@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zootopia/ShopingPage.dart';
 import 'package:zootopia/Users/Pets.dart';
 import 'package:zootopia/Users/QR.dart';
+import 'package:zootopia/Users/View_Hospitals.dart';
 import 'package:zootopia/profile_page.dart';class Bottomnavbar extends StatefulWidget {
   final int initialIndex;
   const Bottomnavbar({super.key, this.initialIndex = 0});
@@ -23,6 +24,7 @@ class _BottomnavBarState extends State<Bottomnavbar> {
     PetsPage(),
     Product(),
     QRCode(),
+    HospitalListScreen(),
     const ProfilePage(),
   ];
 
@@ -40,13 +42,14 @@ class _BottomnavBarState extends State<Bottomnavbar> {
         currentIndex: _selectedindex,
         selectedItemColor: Colors.orange,
         unselectedItemColor: Colors.white60,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black,
         type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: 'Shopping'),
           BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: 'QR'),
+          BottomNavigationBarItem(icon: Icon(Icons.local_hospital), label: 'Hospitals'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

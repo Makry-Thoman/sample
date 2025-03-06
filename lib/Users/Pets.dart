@@ -47,9 +47,9 @@ class _PetsPageState extends State<PetsPage> {
 
           return StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
-                .collection('Pets details')
+                .collection('Pets_details')
                 .where('ownerID', isEqualTo: userId) // Filter by user ID
-                // .orderBy('createdAt', descending: true) // Ensure correct ordering
+                .orderBy('createdAt', descending: true) // Ensure correct ordering
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -78,7 +78,7 @@ class _PetsPageState extends State<PetsPage> {
                     },
                     child: PetCard(
                       petName: pet?['petName'] ?? 'Unknown Pet',
-                      description: "Adorable and friendly!",
+                      description: pet?['petdescription']?? 'Adorable and friendly!',
                       imageUrl: pet?['imageUrl'] ?? '',
                       price: 75, // Hardcoded, consider removing if unused
                       rating: 3.5,

@@ -126,7 +126,7 @@ class _PetNameState extends State<PetName> {
                   ),
                   Row(children: [
                     Radio(
-                      value: 'male',
+                      value: 'Male',
                       groupValue: gender,
                       onChanged: (value) {
                         setState(() {
@@ -138,7 +138,7 @@ class _PetNameState extends State<PetName> {
                     Text('Male', style: TextStyle(fontSize: 18)),
                     SizedBox(width: 25),
                     Radio(
-                      value: 'female',
+                      value: 'Female',
                       groupValue: gender,
                       onChanged: (value) {
                         setState(() {
