@@ -2,8 +2,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zootopia/Models/user_Model.dart';
-import 'package:zootopia/Starting/Session.dart';
+import 'package:zootopia/Users/Models/user_Model.dart';
+import 'package:zootopia/Users/Session.dart';
 
 class UserController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -50,10 +50,9 @@ class UserController {
       if (!userDoc.exists) {
         return "User not found in database"; // Prevents unauthorized logins
       }
-      String mode = 'User';
       String photo = userDoc['imageUrl'] ?? ""; // image save cheyan anu session ayittu
 
-      await Session.saveSession(email, userID, mode ,photo);
+      await SessionUser.saveSession(email, userID,photo);
       return null; // Success
     } on FirebaseAuthException catch (e) {
       return e.message; // Return error message
@@ -68,7 +67,7 @@ class UserController {
 
 //pet details getting
   static Future<Map<String, dynamic>?> getPetsDetails() async{
-    Map<String, String?> sessionData = await Session.getSession(); // Fetch from SharedPreferences
+    Map<String, String?> sessionData = await SessionUser.getSession(); // Fetch from SharedPreferences
     String? ownerID = sessionData['uid'];
 
     if (ownerID==null)

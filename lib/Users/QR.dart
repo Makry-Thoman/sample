@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:zootopia/Users/function/AppbarZootioia.dart';
+import 'package:zootopia/Users/function/DrawerBar.dart';
 import 'package:zootopia/Users/qr_code_generator.dart';
-import 'package:zootopia/function/AppbarZootioia.dart';
-import 'package:zootopia/function/DrawerBar.dart';
+
 
 class QRCode extends StatefulWidget {
   const QRCode({super.key});

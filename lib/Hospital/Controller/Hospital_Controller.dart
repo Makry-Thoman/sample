@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:zootopia/Models/Hospital_Model.dart';
-import 'package:zootopia/Starting/Session.dart';
+import 'package:zootopia/Hospital/Models/Hospital_Model.dart';
+import 'package:zootopia/Hospital/session_hospital.dart';
+
 
 
 class hospitalController{
@@ -49,10 +50,9 @@ class hospitalController{
       if (!userDoc.exists) {
         return "Hospital not found in database"; // Prevents unauthorized logins
       }
-      String mode = 'Hospital';
       String photo = userDoc['imageUrl'] ?? ""; // image save cheyan anu session ayittu
 
-      await Session.saveSession(email, userID, mode ,photo);
+      await SessionHospital.saveSession(email, userID ,photo);
 
       return null; // Success
     } on FirebaseAuthException catch (e) {

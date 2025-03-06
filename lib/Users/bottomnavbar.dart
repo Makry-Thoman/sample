@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:zootopia/ShopingPage.dart';
-import 'package:zootopia/Users/Pets.dart';
+import 'package:zootopia/Users/Shoping_Page.dart';
+import 'package:zootopia/Users/pets_Home_Page.dart';
 import 'package:zootopia/Users/QR.dart';
 import 'package:zootopia/Users/View_Hospitals.dart';
-import 'package:zootopia/profile_page.dart';class Bottomnavbar extends StatefulWidget {
+import 'package:zootopia/Users/profile_page.dart';
+class Bottomnavbar extends StatefulWidget {
   final int initialIndex;
   const Bottomnavbar({super.key, this.initialIndex = 0});
 

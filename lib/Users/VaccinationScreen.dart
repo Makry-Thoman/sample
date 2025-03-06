@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zootopia/Users/function/AppbarZootioia.dart';
 
 class VaccinationScreen extends StatefulWidget {
   const VaccinationScreen({super.key});
@@ -10,6 +11,8 @@ class VaccinationScreen extends StatefulWidget {
 class _VaccinationScreenState extends State<VaccinationScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: zootopiaAppBar(),
+    );
   }
 }

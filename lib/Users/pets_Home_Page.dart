@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:zootopia/Pets%20Start%20-1.dart';
-import 'package:zootopia/Users/PetCard.dart';
-import 'package:zootopia/Users/PetProfile.dart';
-import 'package:zootopia/function/AppbarZootioia.dart';
+import 'package:zootopia/Users/Pet_Card.dart';
+import 'package:zootopia/Users/function/AppbarZootioia.dart';
+import 'package:zootopia/Users/pet_Profile.dart';
+import 'package:zootopia/Users/add_Pets_1.dart';
 
 class PetsPage extends StatefulWidget {
   const PetsPage({super.key});

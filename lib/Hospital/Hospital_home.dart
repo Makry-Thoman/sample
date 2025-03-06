@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zootopia/Hospital/LoginHospital.dart';
-import 'package:zootopia/Starting/Session.dart';
-import 'package:zootopia/function/AppbarZootioia.dart';
+import 'package:zootopia/Hospital/session_hospital.dart';
 class HospitalHome extends StatefulWidget {
   const HospitalHome({super.key});
 
@@ -21,7 +20,7 @@ class _HospitalHomeState extends State<HospitalHome> {
 
 
   Future<void> _loadUserSession() async {
-    Map<String, dynamic>? HospitalDetails = await Session.getHospitalDetails();
+    Map<String, dynamic>? HospitalDetails = await SessionHospital.getHospitalDetails();
 
     setState(() {
       _userEmail = HospitalDetails?['email']  ;
@@ -32,7 +31,6 @@ class _HospitalHomeState extends State<HospitalHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: zootopiaAppBar(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +53,7 @@ class _HospitalHomeState extends State<HospitalHome> {
                     foregroundColor: MaterialStateProperty.all(Colors.white)
                 ),
                 onPressed: () {
-                  Session.clearSession();
+                  SessionHospital.clearSession();
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

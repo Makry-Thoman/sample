@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zootopia/Starting/Session.dart';
 import 'package:zootopia/Users/Login_Page.dart';
+import 'package:zootopia/Users/Session.dart';
+import 'package:zootopia/Users/function/AppbarZootioia.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -23,8 +24,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _loadUserSession() async {
-    Map<String, dynamic>? userDetails = await Session.getUserDetails();
-    Map<String, String?> sessionData = await Session.getSession(); // Fetch from SharedPreferences
+    Map<String, dynamic>? userDetails = await SessionUser.getUserDetails();
+    Map<String, String?> sessionData = await SessionUser.getSession(); // Fetch from SharedPreferences
 
     setState(() {
       _userName = userDetails?['name'] ?? "Unknown User";
@@ -38,13 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Colors.black,
-        toolbarHeight: 70,
-        title: Image.asset('asset/ZootopiaAppWhite.png', height: 40),
-        centerTitle: true,
-      ),
+      appBar: zootopiaAppBar(),
       body: _isLoading
           ? Center(child: CircularProgressIndicator()) // Show loading indicator
           : ListView(
@@ -83,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             foregroundColor: MaterialStateProperty.all(Colors.white),
                           ),
                           onPressed: () {
-                            Session.clearSession();
+                            SessionUser.clearSession();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => LoginPage()),

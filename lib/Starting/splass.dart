@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zootopia/Hospital/Hospital_home.dart';
-import 'package:zootopia/Starting/Session.dart';
+import 'package:zootopia/Hospital/session_hospital.dart';
 import 'package:zootopia/Starting/userSelection.dart';
-import 'package:zootopia/bottomnavbar.dart';
+import 'package:zootopia/Users/Session.dart';
+import 'package:zootopia/Users/bottomnavbar.dart';
 class Splass extends StatefulWidget {
   const Splass({super.key});
 
@@ -28,28 +29,27 @@ class _SplassState extends State<Splass> {
 
 
   // Check session and navigate accordingly
+  // Check session and navigate accordingly
   Future<void> _checkSession() async {
-    final sessionData = await Session.getSession();
-    final bool isLoggedIn = sessionData['uid'] != null;
-    final String? Mode = sessionData['mode'];
+    final userSession = await SessionUser.getSession();
+    final hospitalSession = await SessionHospital.getSession();
+
+    final bool isUserLoggedIn = userSession['uid'] != null;
+    final bool isHospitalLoggedIn = hospitalSession['uid'] != null;
 
     // Delay for splash animation
     await Future.delayed(const Duration(seconds: 3));
 
-    // Navigate to Home if logged in, else Login
-    if (isLoggedIn) {
-      if(Mode == 'User') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const Bottomnavbar()));
-      }
-      else if(Mode == 'Hospital')
-      {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HospitalHome()));
-      }
-
+    if (isUserLoggedIn) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Bottomnavbar()),
+      );
+    } else if (isHospitalLoggedIn) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HospitalHome()),
+      );
     } else {
       Navigator.pushReplacement(
         context,
@@ -57,6 +57,7 @@ class _SplassState extends State<Splass> {
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

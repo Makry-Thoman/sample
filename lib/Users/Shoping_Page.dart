@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:zootopia/function/DrawerBar.dart';
+import 'package:zootopia/Users/function/AppbarZootioia.dart';
+import 'package:zootopia/Users/function/DrawerBar.dart';
 
 class Product extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: MyDrawer(),
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Colors.black,
-        toolbarHeight: 70,
-        title: Image.asset('asset/ZootopiaAppWhite.png', height: 40),
-        centerTitle: true,
-      ),
+      appBar: zootopiaAppBar(),
       body: GridView.builder(
         padding: EdgeInsets.all(10),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

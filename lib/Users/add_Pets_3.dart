@@ -4,9 +4,9 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:zootopia/Starting/Session.dart';
-import 'package:zootopia/bottomnavbar.dart';
-import 'package:zootopia/function/AppbarZootioia.dart';
+import 'package:zootopia/Users/Session.dart';
+import 'package:zootopia/Users/bottomnavbar.dart';
+import 'package:zootopia/Users/function/AppbarZootioia.dart';
 
 class petBreed extends StatefulWidget {
   final String petcategory;
@@ -43,7 +43,7 @@ class _petBreedState extends State<petBreed> {
   }
 
   Future<String?> getData() async {
-    Map<String, String?> sessionData = await Session.getSession();
+    Map<String, String?> sessionData = await SessionUser.getSession();
 
     print(sessionData['uid']);
     uidd = sessionData['uid']!;
@@ -221,7 +221,7 @@ class _petBreedState extends State<petBreed> {
                   TextFormField(
                     controller: _petDescriptionController,
                     decoration: InputDecoration(
-                        hintText: '${widget.petName} is wonder full dog',
+                        hintText: '${widget.petName} is wonder full ${widget.petcategory}',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25))),
                   ),

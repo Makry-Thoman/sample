@@ -6,8 +6,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:zootopia/function/AppbarZootioia.dart';
-import 'package:flutter/services.dart'; // For Media Scanner
+import 'package:zootopia/Users/function/AppbarZootioia.dart';
+
 
 class QRCodeGenerator extends StatefulWidget {
   QRCodeGenerator({super.key, required this.qrData, required this.pet_name});

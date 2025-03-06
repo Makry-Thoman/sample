@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:zootopia/Controller/User_Controller.dart';
 import 'package:zootopia/Users/Login_Page.dart';
-import 'package:zootopia/bottomnavbar.dart';
-import 'package:zootopia/function/AppbarZootioia.dart';
+import 'package:zootopia/Users/User_Controller/User_Controller.dart';
 
 class UserForm extends StatefulWidget {
   const UserForm({Key? key}) : super(key: key);

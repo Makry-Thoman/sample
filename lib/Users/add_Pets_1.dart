@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:zootopia/Users/add_Pets_2.dart';
+import 'package:zootopia/Users/function/AppbarZootioia.dart';
 import 'dart:io';
 
-import 'package:zootopia/Animaltype.dart';
-import 'package:zootopia/function/AppbarZootioia.dart';
-import 'package:zootopia/function/DrawerBar.dart';
+import 'package:zootopia/Users/function/DrawerBar.dart';
+
 
 class PetName extends StatefulWidget {
   const PetName({super.key});

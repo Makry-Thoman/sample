@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zootopia/Controller/Hospital_Controller.dart';
-import 'package:zootopia/Controller/User_Controller.dart';
+import 'package:zootopia/Hospital/Controller/Hospital_Controller.dart';
 import 'package:zootopia/Hospital/LoginHospital.dart';
-import 'package:zootopia/bottomnavbar.dart';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 class Registerhospital extends StatefulWidget {

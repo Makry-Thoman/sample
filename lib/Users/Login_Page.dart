@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:zootopia/Controller/User_Controller.dart';
 import 'package:zootopia/Users/Signup.dart';
-import 'package:zootopia/bottomnavbar.dart';
-import 'package:zootopia/function/ForgotPassword.dart';
+import 'package:zootopia/Users/User_Controller/User_Controller.dart';
+import 'package:zootopia/Users/bottomnavbar.dart';
+import 'package:zootopia/Users/function/ForgotPassword.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

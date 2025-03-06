@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zootopia/Controller/Hospital_Controller.dart';
+import 'package:zootopia/Hospital/Controller/Hospital_Controller.dart';
 import 'package:zootopia/Hospital/Hospital_home.dart';
 import 'package:zootopia/Hospital/RegisterHospital.dart';
 

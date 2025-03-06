@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zootopia/Starting/Session.dart';
 import 'package:zootopia/Users/Login_Page.dart';
+import 'package:zootopia/Users/Session.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -20,7 +20,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Future<void> _loadUserSession() async {
-    Map<String, String?> sessionData = await Session.getSession(); // Fetch from SharedPreferences
+    Map<String, String?> sessionData = await SessionUser.getSession(); // Fetch from SharedPreferences
 
     setState(() {
       _userName = sessionData['name'] ?? "Unknown User";
@@ -57,7 +57,7 @@ class _MyDrawerState extends State<MyDrawer> {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () async {
-              Session.clearSession();
+              SessionUser.clearSession();
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
