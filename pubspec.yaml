@@ -56,6 +56,13 @@ dependencies:
   external_path: ^2.0.1
   screenshot: ^3.0.0
   share_plus: ^7.2.1
+#Hospitalside
+  geolocator: ^13.0.2
+  geocoding: ^3.0.0
+  google_maps_flutter: ^2.10.1
+  csc_picker: ^0.2.7
+
+
 
   flutter_rating_bar: ^4.0.0
 
@@ -98,6 +105,15 @@ flutter:
       - asset/or.png
       - asset/image.png
       - asset/CreatePet.png
+
+#      - Hospital
+      - asset/Hospital/LoginPagePhoto.png
+      - asset/Hospital/zootopiacare+appbar.png
+      - asset/Hospital/Loading.json
+      - asset/Hospital/no_image.png
+      - asset/Hospital/Loading_photo.png
+      - asset/Hospital/sample.json
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

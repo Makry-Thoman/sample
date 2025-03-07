@@ -64,7 +64,7 @@ class _LoginHospitalState extends State<LoginHospital> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Image.asset("asset/image.png",
+                      Image.asset("asset/Hospital/LoginPagePhoto.png",
                           height: 300),
                       const SizedBox(height: 16),
                       TextFormField(
