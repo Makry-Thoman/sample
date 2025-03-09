@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zootopia/Starting/userSelection.dart';
 import 'package:zootopia/Users/Login_Page.dart';
 import 'package:zootopia/Users/Session.dart';
 import 'package:zootopia/Users/function/AppbarZootioia.dart';
@@ -81,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             SessionUser.clearSession();
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => LoginPage()),
+                              MaterialPageRoute(builder: (context) => Userselection()),
                             );
                           },
                           child: Text("Log Out"),

@@ -12,6 +12,12 @@
 <!--        android:value="YOUR_GOOGLE_MAPS_API_KEY"/>-->
 
 
+<!--    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>-->
+<!--    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>-->
+
+
+
+
 
 
 
@@ -19,6 +25,12 @@
         android:label="zootopia"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+
+<!--        <receiver android:name="com.dexterous.flutterlocalnotifications.receivers.NotificationReceiver" />-->
+<!--        <receiver android:name="com.dexterous.flutterlocalnotifications.receivers.ScheduledNotificationReceiver" />-->
+<!--        <receiver android:name="com.dexterous.flutterlocalnotifications.receivers.DeletedNotificationReceiver" />-->
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

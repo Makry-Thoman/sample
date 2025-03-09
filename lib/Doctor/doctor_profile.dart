@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zootopia/Doctor/Function_Doctor/doc_Appbar.dart';
 import 'package:zootopia/Doctor/LoginDoctor.dart';
 import 'package:zootopia/Doctor/session_Doctor.dart';
+import 'package:zootopia/Starting/userSelection.dart';
 
 
 class DoctorProfile extends StatefulWidget {
@@ -82,7 +83,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                             SessionDoctor.clearSession();
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => LoginDoctor()),
+                              MaterialPageRoute(builder: (context) => Userselection()),
                             );
                           },
                           child: Text("Log Out"),

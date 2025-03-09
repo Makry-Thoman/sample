@@ -52,11 +52,11 @@ class _SplassState extends State<Splass> {
         context,
         MaterialPageRoute(builder: (context) => Doctor_Nav_Bar()),
       );
-    }else if (userUid != null) {
+    }else if (userUid != null&& hospitalMode == "user") {
       debugPrint("Navigating to Bottomnavbar()");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Bottomnavbar()),
+        MaterialPageRoute(builder: (context) =>  Bottomnavbar()),
       );
     } else {
       debugPrint("Navigating to Userselection()");

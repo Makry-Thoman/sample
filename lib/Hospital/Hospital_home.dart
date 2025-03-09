@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:zootopia/Hospital/Doctor_Timings_Hospital.dart';
 import 'package:zootopia/Hospital/FunctionsHospital/care_appbar.dart';
 import 'package:zootopia/Hospital/LoginHospital.dart';
 import 'package:zootopia/Hospital/approve_doctor.dart';
+import 'package:zootopia/Hospital/manage_doctors_Hospital.dart';
 import 'package:zootopia/Hospital/session_hospital.dart';
+import 'package:zootopia/Starting/userSelection.dart';
 
 class HospitalHome extends StatefulWidget {
   @override
@@ -70,9 +73,9 @@ class _HospitalHomeState extends State<HospitalHome> {
               physics: NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               children: [
-                _buildFeatureTile(context, Icons.calendar_today, 'Manage Doctors', ApproveDoctorsPage()),
-                // _buildFeatureTile(context, Icons.pets, 'View Registered Pets', '/viewPets'),
-                // _buildFeatureTile(context, Icons.medical_services, 'Add Products', '/addProducts'),
+                _buildFeatureTile(context, Icons.calendar_today, 'Approve Doctors', ApproveDoctorsPage()),
+                _buildFeatureTile(context, Icons.pets, 'Manage Doctor', ManageDoctorHospital()),
+                _buildFeatureTile(context, Icons.timer, ' Doctor Timings ', ManageDoctorTimings()),
                 // _buildFeatureTile(context, Icons.person, 'Doctor Profiles', '/doctorProfiles'),
                 // _buildFeatureTile(context, Icons.history, 'Patient History', '/patientHistory'),
                 // _buildFeatureTile(context, Icons.notifications, 'Notifications', '/notifications'),
@@ -89,7 +92,7 @@ class _HospitalHomeState extends State<HospitalHome> {
                 SessionHospital.clearSession();
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginHospital()),
+                  MaterialPageRoute(builder: (context) => Userselection()),
                 );
               },
               child: Text("Log Out"),

@@ -15,6 +15,8 @@ class SessionUser{
     await prefs.setString(_emailKey, email);
     await prefs.setString(_uuidKey, uuid);
     await prefs.setString(_photoKey, photo);
+    await prefs.setString(_modeKey, "user");
+
   }
 
 

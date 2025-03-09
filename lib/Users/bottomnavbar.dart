@@ -4,6 +4,8 @@ import 'package:zootopia/Users/pets_Home_Page.dart';
 import 'package:zootopia/Users/QR.dart';
 import 'package:zootopia/Users/View_Hospitals.dart';
 import 'package:zootopia/Users/profile_page.dart';
+import 'package:zootopia/Users/sample.dart';
+import 'package:zootopia/Users/sample2.dart';
 class Bottomnavbar extends StatefulWidget {
   final int initialIndex;
   const Bottomnavbar({super.key, this.initialIndex = 0});
@@ -22,6 +24,10 @@ class _BottomnavBarState extends State<Bottomnavbar> {
   }
 
   final List<Widget> _pages = [
+    // Home(),
+    // Notifications(),
+    // ChatList(),
+    // ChatScreen
     PetsPage(),
     Product(),
     QRCode(),

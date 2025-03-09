@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:zootopia/Doctor/Function_Doctor/doc_Appbar.dart';
 import 'package:zootopia/Doctor/add_hospitals.dart';
+import 'package:zootopia/Doctor/mark_leave_Doctor.dart';
 
 class ViewHospitalDoctor extends StatefulWidget {
   @override
@@ -68,12 +69,22 @@ class _ViewHospitalDoctorState extends State<ViewHospitalDoctor> {
             itemBuilder: (context, index) {
               var hospital = snapshot.data![index];
 
-              return Card(
+              return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DoctorMarkLeave(hospitalId: hospital.id),
+                      ),
+                    );
+                  }
+                  ,child:  Card(
                 margin: EdgeInsets.all(10),
                 elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+
                 child: Padding(
                   padding: EdgeInsets.all(10),
                   child: Column(
@@ -106,6 +117,7 @@ class _ViewHospitalDoctorState extends State<ViewHospitalDoctor> {
                     ],
                   ),
                 ),
+              )
               );
             },
           );
