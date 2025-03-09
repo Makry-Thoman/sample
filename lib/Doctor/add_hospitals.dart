@@ -79,6 +79,10 @@ class _AddHospitalDoctorState extends State<AddHospitalDoctor> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Request already sent to this hospital')),
         );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => ViewHospitalDoctor()),
+        );
       }
       setState(() {
         isSendingRequest = false;
@@ -92,7 +96,12 @@ class _AddHospitalDoctorState extends State<AddHospitalDoctor> {
       if (hospitals.contains(selectedHospitalId)) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('You are already approved for this hospital')),
+            SnackBar(
+                content: Text('You are already approved for this hospital')),
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ViewHospitalDoctor()),
           );
         }
         setState(() {
@@ -130,29 +139,31 @@ class _AddHospitalDoctorState extends State<AddHospitalDoctor> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DocAppBar(),
       body: isFetchingHospitals
-          ? Center(child: CircularProgressIndicator()) // Show loading while fetching hospitals
+          ? Center(
+          child: CircularProgressIndicator()) // Show loading while fetching hospitals
           : SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Select State", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text("Select State",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               SizedBox(height: 10),
 
               DropdownButtonFormField<String>(
                 value: selectedState,
                 items: stateList
-                    .map((state) => DropdownMenuItem(
-                  value: state,
-                  child: Text(state),
-                ))
+                    .map((state) =>
+                    DropdownMenuItem(
+                      value: state,
+                      child: Text(state),
+                    ))
                     .toList(),
                 onChanged: (value) {
                   setState(() {
@@ -160,77 +171,118 @@ class _AddHospitalDoctorState extends State<AddHospitalDoctor> {
                     selectedHospitalId = null;
                   });
                 },
-                decoration: InputDecoration(border: OutlineInputBorder(), labelText: 'Select State'),
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(), labelText: 'Select State'),
               ),
 
               SizedBox(height: 20),
 
               if (selectedState != null) ...[
-                Text("Select Hospital", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text("Select Hospital", style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.bold)),
                 SizedBox(height: 10),
 
-                DropdownButtonFormField<String>(
-                  value: selectedHospitalId,
-                  items: hospitalList
+                Column(
+                  children: hospitalList
                       .where((hospital) => hospital['state'] == selectedState)
                       .map((hospital) {
-                    return DropdownMenuItem(
-                      value: hospital.id,
-                      child: Text(hospital['hospitalname']),
+                    return Card(
+                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      elevation: 3,
+                      child: ListTile(
+                        leading: hospital['imageUrl'] != null
+                            ? Image.network(
+                          hospital['imageUrl'],
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        )
+                            : Icon(
+                            Icons.local_hospital, size: 50, color: Colors.grey),
+                        title: Text(
+                          hospital['hospitalname'],
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('District: ${hospital['district']}'),
+                            Text('Email: ${hospital['email']}'),
+                          ],
+                        ),
+                        trailing: selectedHospitalId == hospital.id
+                            ? Icon(Icons.check_circle, color: Colors.green)
+                            : Icon(Icons.arrow_forward_ios, size: 18),
+                        onTap: () {
+                          setState(() {
+                            selectedHospitalId = hospital.id;
+                            selectedHospitalPhoto = hospital['imageUrl'];
+                            selectedHospitalDescription =
+                            hospital['description'];
+                            selectedHospitalDistrict = hospital['district'];
+                            selectedHospitalEmail = hospital['email'];
+                            selectedHospitalState = hospital['state'];
+                          });
+                        },
+                      ),
                     );
                   }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedHospitalId = value as String;
-                      var hospital = hospitalList.firstWhere((h) => h.id == selectedHospitalId);
-                      selectedHospitalPhoto = hospital['imageUrl'];
-                      selectedHospitalDescription = hospital['description'];
-                      selectedHospitalDistrict = hospital['district'];
-                      selectedHospitalEmail = hospital['email'];
-                      selectedHospitalState = hospital['state'];
-                    });
-                  },
-                  decoration: InputDecoration(border: OutlineInputBorder(), labelText: 'Select Hospital'),
                 ),
               ],
 
               SizedBox(height: 20),
 
-              if (selectedHospitalPhoto != null)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.network(selectedHospitalPhoto!, height: 150),
-                ),
+              if (selectedHospitalId != null) ...[
+                Text("Selected Hospital Details", style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.bold)),
+                SizedBox(height: 10),
 
-              if (selectedHospitalDescription != null)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    selectedHospitalDescription!,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                if (selectedHospitalPhoto != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.network(selectedHospitalPhoto!, height: 150),
                   ),
-                ),
 
-              if (selectedHospitalDistrict != null)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('District: $selectedHospitalDistrict',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey)),
-                ),
+                if (selectedHospitalDescription != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      selectedHospitalDescription!,
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w400),
+                    ),
+                  ),
 
-              if (selectedHospitalState != null)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('State: $selectedHospitalState',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey)),
-                ),
+                if (selectedHospitalDistrict != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('District: $selectedHospitalDistrict',
+                        style: TextStyle(fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey)),
+                  ),
 
-              if (selectedHospitalEmail != null)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Email: $selectedHospitalEmail',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey)),
-                ),
+                if (selectedHospitalState != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('State: $selectedHospitalState',
+                        style: TextStyle(fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey)),
+                  ),
+
+                if (selectedHospitalEmail != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Email: $selectedHospitalEmail',
+                        style: TextStyle(fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey)),
+                  ),
+              ],
 
               SizedBox(height: 20),
 

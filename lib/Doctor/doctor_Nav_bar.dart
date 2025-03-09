@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:zootopia/Doctor/add_hospitals.dart';
+import 'package:zootopia/Doctor/chat_page_Doctor.dart';
 import 'package:zootopia/Doctor/doctorHome.dart';
 import 'package:zootopia/Doctor/doctor_profile.dart';
 import 'package:zootopia/Doctor/view_Hospital_Doctor.dart';
 
 class Doctor_Nav_Bar extends StatefulWidget {
   final int initialIndex;
+
   const Doctor_Nav_Bar({super.key, this.initialIndex = 0});
 
   @override
@@ -24,9 +26,9 @@ class _BottomnavBarState extends State<Doctor_Nav_Bar> {
   final List<Widget> _pages = [
     DoctorHome(),
     ViewHospitalDoctor(),
-    // QRCode(),
+    ChatDoctor(),
     // HospitalListScreen(),
-     DoctorProfile(),
+    DoctorProfile(),
   ];
 
   void _onItemTapped(int index) {
@@ -48,9 +50,10 @@ class _BottomnavBarState extends State<Doctor_Nav_Bar> {
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: 'Shopping'),
-          BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: 'QR'),
-          BottomNavigationBarItem(icon: Icon(Icons.local_hospital), label: 'Hospitals'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.local_hospital), label: 'My Hospitals'),
+          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
+          // BottomNavigationBarItem(icon: Icon(Icons.local_hospital), label: 'Hospitals'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

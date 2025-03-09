@@ -20,6 +20,7 @@ class _RegisterhospitalState extends State<Registerhospital> {
   final _passwordController = TextEditingController();
   final _districtController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _phoneController = TextEditingController();
   final hospitalController _hospitalController = hospitalController();
 
   File? _image;
@@ -77,7 +78,8 @@ class _RegisterhospitalState extends State<Registerhospital> {
         imageUrl,
         selectedState!,  // Pass selected state
         _districtController.text.trim(),
-          _descriptionController.text.trim(),// Pass district
+          _descriptionController.text.trim(),
+          _phoneController.text.trim(),// Pass district
       );
       setState(() => _isLoading = false);
 
@@ -158,6 +160,14 @@ class _RegisterhospitalState extends State<Registerhospital> {
                       labelText: 'Description about your hospital',
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
                       prefixIcon: Icon(Icons.description)),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _phoneController,
+                  decoration: InputDecoration(
+                      labelText: 'Phone no of Hospital',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+                      prefixIcon: Icon(Icons.phone)),
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(

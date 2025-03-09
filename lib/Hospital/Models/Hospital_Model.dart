@@ -3,18 +3,20 @@ class HospitalModel {
   String hospitalname;
   String email;
   String imageUrl;
-  String state;   // Added state field
+  String state;
   String district;
   String description;
+  String phone;
 
   HospitalModel({
     required this.uid,
     required this.hospitalname,
     required this.email,
     required this.imageUrl,
-    required this.state,   // Added
+    required this.state,
     required this.district,
     required this.description,
+    required this.phone,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,9 +25,10 @@ class HospitalModel {
       'hospitalname': hospitalname,
       'email': email,
       'imageUrl': imageUrl,
-      'state': state,   // Added
+      'state': state,
       'district': district,
       'description': description,
+      'phone': phone,
     };
   }
 
@@ -35,9 +38,10 @@ class HospitalModel {
       hospitalname: map['hospitalname'],
       email: map['email'],
       imageUrl: map['imageUrl'],
-      state: map['state'],   // Added
+      state: map['state'],
       district: map['district'],
-        description: map['description'],
+      description: map['description'],
+      phone: map['phone'],
     );
   }
 }

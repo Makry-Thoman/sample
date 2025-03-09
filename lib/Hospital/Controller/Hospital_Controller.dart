@@ -11,7 +11,7 @@ class hospitalController{
   final FirebaseFirestore _firestore =FirebaseFirestore.instance;
 
   // register hospital
-  Future<String?> registerHospital(String hospitalname, String email, String password, String? imageUrl, String state, String district, String description) async {
+  Future<String?> registerHospital(String hospitalname, String email, String password, String? imageUrl, String state, String district, String description, String phone) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -26,6 +26,7 @@ class hospitalController{
         state: state,
         district: district,
         description: description,
+        phone: phone,
       );
 
       await _firestore.collection("Hospital").doc(hospital.uid).set(hospital.toMap());
