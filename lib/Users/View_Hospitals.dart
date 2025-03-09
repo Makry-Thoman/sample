@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:zootopia/Users/List_Doctors_Users.dart';
 import 'package:zootopia/Users/function/AppbarZootioia.dart';
 
 class HospitalListScreen extends StatefulWidget {
@@ -20,7 +21,6 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
     fetchStates();
   }
 
-  // Fetch unique states from Firestore
   Future<void> fetchStates() async {
     try {
       QuerySnapshot querySnapshot =
@@ -38,9 +38,11 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
     }
   }
 
-  // Fetch hospitals based on selected state
   Future<void> fetchHospitals(String location) async {
-    setState(() => isLoading = true);
+    setState(() {
+      isLoading = true;
+      hospitals.clear();
+    });
 
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("Hospital")
@@ -49,11 +51,11 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
 
     List<Map<String, String>> hospitalList = querySnapshot.docs.map((doc) {
       return {
-        "name": doc["hospitalname"].toString(),
-        "district": doc["district"].toString(),
-        "description": doc["description"].toString(),
+        "id": doc.id,
+        "name": doc["hospitalname"]?.toString() ?? "Unknown",
+        "district": doc["district"]?.toString() ?? "Unknown",
+        "description": doc["description"]?.toString() ?? "No description available",
         "imageUrl": doc["imageUrl"]?.toString() ?? "",
-
       };
     }).toList();
 
@@ -92,6 +94,7 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
               onChanged: (value) {
                 setState(() {
                   selectedLocation = value;
+                  hospitals.clear();
                   fetchHospitals(value!);
                 });
               },
@@ -101,7 +104,6 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
             Expanded(
               child: Stack(
                 children: [
-                  // Hospital List
                   selectedLocation == null
                       ? Center(
                       child: Text('Select a location to see hospitals',
@@ -110,94 +112,102 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
                     itemCount: hospitals.length,
                     itemBuilder: (context, index) {
                       var hospital = hospitals[index];
-                      return Card(
-                        elevation: 4,
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // Bigger Image on Left
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: hospital["imageUrl"]!.isNotEmpty
-                                    ? FadeInImage.assetNetwork(
-                                  placeholder:
-                                  "asset/Hospital/Loading_photo.png",
-                                  image: hospital["imageUrl"]!,
-                                  width: 120,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                  imageErrorBuilder: (context,
-                                      error, stackTrace) =>
-                                      Icon(Icons.broken_image,
-                                          size: 50,
-                                          color: Colors.grey),
-                                )
-                                    : Image.asset(
-                                  "asset/Hospital/no_image.png",
-                                  width: 120,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              SizedBox(width: 15), // Space between image & text
 
-                              // Hospital Details on Right
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      hospital['name']!,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DoctorListScreen(
+                                    hospitalId: hospitals[index]['id']!,
+                                  )));
+                        },
+                        child: Card(
+                            elevation: 4,
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.center,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius:
+                                    BorderRadius.circular(10),
+                                    child: hospital["imageUrl"]!.isNotEmpty
+                                        ? FadeInImage.assetNetwork(
+                                      placeholder:
+                                      "asset/Hospital/Loading_photo.png",
+                                      image: hospital["imageUrl"]!,
+                                      width: 120,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                      imageErrorBuilder: (context,
+                                          error, stackTrace) =>
+                                          Icon(Icons.broken_image,
+                                              size: 50,
+                                              color: Colors.grey),
+                                    )
+                                        : Image.asset(
+                                      "asset/Hospital/no_image.png",
+                                      width: 120,
+                                      height: 100,
+                                      fit: BoxFit.cover,
                                     ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      hospital['district']!,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey[700],
-                                      ),
+                                  ),
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          hospital['name']!,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          hospital['district']!,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey[700],
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          hospital['description']!,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey[700],
+                                          ),
+                                        ),
+                                        SizedBox(height: 10),
+                                        Align(
+                                          alignment:
+                                          Alignment.centerRight,
+                                          child: IconButton(
+                                            icon: Icon(Icons.info_outline,
+                                                color: Colors.blue),
+                                            onPressed: () {
+                                              // Navigate to details page
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      hospital['description']!,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey[700],
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: IconButton(
-                                        icon: Icon(Icons.info_outline,
-                                            color: Colors.blue),
-                                        onPressed: () {
-                                          // Navigate to details page
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
+                            )),
                       );
                     },
                   ),
-
-                  // Circular Progress Indicator (Displayed when fetching hospitals)
                   if (isLoading)
                     Center(
                       child: Container(
