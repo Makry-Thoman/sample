@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:zootopia/Doctor/LoginDoctor.dart';
-import 'package:zootopia/Hospital/Controller/Hospital_Controller.dart';
-import 'package:zootopia/Hospital/Hospital_home.dart';
-import 'package:zootopia/Hospital/RegisterHospital.dart';
+import 'package:zootopia/Doctor/Controller/Doctor_Controller.dart';
+import 'package:zootopia/Doctor/Register_Doctor.dart';
+import 'package:zootopia/Doctor/doctor_Nav_bar.dart';
 
-class LoginHospital extends StatefulWidget {
-  const LoginHospital({super.key});
+class LoginDoctor extends StatefulWidget {
+  const LoginDoctor({super.key});
 
   @override
-  State<LoginHospital> createState() => _LoginHospitalState();
+  State<LoginDoctor> createState() => _LoginDoctorState();
 }
 
-class _LoginHospitalState extends State<LoginHospital> {
+class _LoginDoctorState extends State<LoginDoctor> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordVisible = false;
-  final hospitalController _hospitalController=hospitalController();
+  final doctorController _doctorController = doctorController();
 
 
   @override
@@ -30,7 +29,7 @@ class _LoginHospitalState extends State<LoginHospital> {
     if (_formKey.currentState!.validate()) {
       String email =_emailController.text.trim();
       String password=_passwordController.text.trim();
-      String? result = await _hospitalController.loginHospital(email, password);
+      String? result = await _doctorController.loginDoctor(email, password);
 
       if(result==null)
       {
@@ -39,7 +38,7 @@ class _LoginHospitalState extends State<LoginHospital> {
         );
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HospitalHome()),
+          MaterialPageRoute(builder: (context) => Doctor_Nav_Bar()),
               (route) => false,  // Removes all previous routes
         );
       } else
@@ -53,7 +52,6 @@ class _LoginHospitalState extends State<LoginHospital> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Center(
 
         child: Padding(
@@ -65,13 +63,13 @@ class _LoginHospitalState extends State<LoginHospital> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Image.asset("asset/Hospital/LoginPagePhoto.png",
+                      Image.asset("asset/Doctor/LoginDoc_white_bg.png",
                           height: 300),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                          labelText: 'Hospital email id',
+                          labelText: 'Email id',
                           prefixIcon: Icon(Icons.email),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25),
@@ -130,20 +128,6 @@ class _LoginHospitalState extends State<LoginHospital> {
                       ),
 
                        */
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            LoginDoctor()));
-                              },
-                              child: Text("Login as Doctor?")),
-                        ],
-                      ),
                       const SizedBox(height: 16),
 
                       SizedBox(
@@ -166,7 +150,7 @@ class _LoginHospitalState extends State<LoginHospital> {
                                   foregroundColor: MaterialStateProperty.all(Colors.white)
                               ),
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => Registerhospital()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterDoctor()));
                               }, child: Text('Register'))
                       ),
                       const SizedBox(height: 16),
@@ -179,7 +163,7 @@ class _LoginHospitalState extends State<LoginHospital> {
                                   foregroundColor: MaterialStateProperty.all(Colors.white)
                               ),
                               onPressed: () {
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HospitalHome()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Doctor_Nav_Bar()));
                               }, child: Text('Test'))
                       )
                     ],

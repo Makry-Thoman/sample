@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zootopia/Hospital/Controller/Hospital_Controller.dart';
+import 'package:zootopia/Hospital/FunctionsHospital/care_appbar.dart';
 import 'package:zootopia/Hospital/LoginHospital.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -100,11 +101,7 @@ class _RegisterhospitalState extends State<Registerhospital> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Image.asset('asset/ZootopiaAppWhite.png', height: 40),
-        centerTitle: true,
-      ),
+      appBar: careAppBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

@@ -62,8 +62,6 @@ dependencies:
   google_maps_flutter: ^2.10.1
   csc_picker: ^0.2.7
 
-
-
   flutter_rating_bar: ^4.0.0
 
 dev_dependencies:
@@ -113,6 +111,10 @@ flutter:
       - asset/Hospital/no_image.png
       - asset/Hospital/Loading_photo.png
       - asset/Hospital/sample.json
+
+#        Doctor
+      - asset/Doctor/LoginDoc_white_bg.png
+      - asset/Doctor/DocAppbar_black_bg.png
 
   #   - images/a_dot_ham.jpeg
 

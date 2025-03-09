@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SessionHospital{
+class SessionDoctor{
   static const String _emailKey ='email';
   static const String _uuidKey = 'uid';
   static const String _modeKey= 'mode';
@@ -15,7 +15,7 @@ class SessionHospital{
     await prefs.setString(_emailKey, email);
     await prefs.setString(_uuidKey, uuid);
     await prefs.setString(_photoKey, photo);
-    await prefs.setString(_modeKey, "hospital"); // **Fix: Save mode**
+    await prefs.setString(_modeKey, "doctor"); // **Fix: Save mode**
 
   }
 
@@ -33,7 +33,7 @@ class SessionHospital{
 
 
   // get Hospital details from firestore using email
-  static Future<Map<String, dynamic>?> getHospitalDetails() async{
+  static Future<Map<String, dynamic>?> getDoctorDetails() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? uuid = prefs.getString(_uuidKey);
 
@@ -44,7 +44,7 @@ class SessionHospital{
 
     try{
       QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('Hospital')
+          .collection('Doctors')
           .where('uid',isEqualTo: uuid)
           .limit(1)
           .get();

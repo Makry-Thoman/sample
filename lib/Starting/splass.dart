@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:zootopia/Doctor/doctorHome.dart';
+import 'package:zootopia/Doctor/doctor_Nav_bar.dart';
+import 'package:zootopia/Doctor/session_Doctor.dart';
 import 'package:zootopia/Hospital/Hospital_home.dart';
 import 'package:zootopia/Hospital/session_hospital.dart';
 import 'package:zootopia/Starting/userSelection.dart';
 import 'package:zootopia/Users/Session.dart';
 import 'package:zootopia/Users/bottomnavbar.dart';
+
 class Splass extends StatefulWidget {
   const Splass({super.key});
 
@@ -13,44 +17,49 @@ class Splass extends StatefulWidget {
 }
 
 class _SplassState extends State<Splass> {
+  @override
   void initState() {
     super.initState();
-    // Add a post-frame callback to delay the navigation to the next screen
-    /* WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(Duration(seconds: 3), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginForm()),
-        );
-      });
-    });*/
     _checkSession();
   }
-
-
-  // Check session and navigate accordingly
-  // Check session and navigate accordingly
   Future<void> _checkSession() async {
     final userSession = await SessionUser.getSession();
     final hospitalSession = await SessionHospital.getSession();
+    final doctorSession = await SessionDoctor.getSession();
 
-    final bool isUserLoggedIn = userSession['uid'] != null;
-    final bool isHospitalLoggedIn = hospitalSession['uid'] != null;
 
-    // Delay for splash animation
+    debugPrint("User Session: $userSession");
+    debugPrint("Hospital Session: $hospitalSession");
+
+    final String? userUid = userSession['uid'];
+    final String? hospitalUid = hospitalSession['uid'];
+    final String? hospitalMode = hospitalSession['mode']; // **Added check for mode**
+    final String? doctorUid = hospitalSession['uid'];
+    final String? doctorMode = hospitalSession['mode'];
+
     await Future.delayed(const Duration(seconds: 3));
 
-    if (isUserLoggedIn) {
+    if (hospitalUid != null && hospitalMode == "hospital") { // **Fix: Ensures hospital mode**
+      debugPrint("Navigating to HospitalHome()");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HospitalHome()),
+      );
+    }
+    else if (hospitalUid != null && hospitalMode == "doctor") { // **Fix: Ensures hospital mode**
+      debugPrint("Navigating to doctor()");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Doctor_Nav_Bar()),
+      );
+    }else if (userUid != null) {
+      debugPrint("Navigating to Bottomnavbar()");
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Bottomnavbar()),
       );
-    } else if (isHospitalLoggedIn) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HospitalHome()),
-      );
     } else {
+      debugPrint("Navigating to Userselection()");
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Userselection()),
@@ -58,13 +67,12 @@ class _SplassState extends State<Splass> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.black,
-        body: Center(
-      child: Lottie.asset("asset/Animation - 1737646946039.json")
-    ));
+      body: Center(
+        child: Lottie.asset("asset/Animation - 1737646946039.json"),
+      ),
+    );
   }
 }
